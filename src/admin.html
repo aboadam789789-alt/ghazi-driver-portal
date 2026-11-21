@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لوحة الإدارة | EL-GHAZY ERP</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1420;--panel:#172737;--line:#2c4257;--gold:#d9ad58;--txt:#f2f6fa;--muted:#9fb1c1;--green:#48c78e;--red:#f07878;--blue:#78b7ed}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(140deg,#0b1420,#14283a);color:var(--txt);font-family:Tahoma,Arial,sans-serif;min-height:100vh}
+.wrap{max-width:1240px;margin:auto;padding:22px}.brand{display:flex;align-items:center;gap:12px;margin:8px 0 22px}.mark{width:50px;height:50px;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold);font-weight:900}.brand h1{font-size:21px;margin:0}.muted,small{color:var(--muted)}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 12px 30px #0003}
+h2{font-size:18px;margin:0 0 15px}label{display:block;color:#c4d1dc;font-size:13px;margin:12px 0 6px}
+input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;background:#0e1b28;color:white;font:inherit}button{border:0;border-radius:9px;padding:11px 16px;background:var(--gold);color:#172331;font:inherit;font-weight:bold;cursor:pointer}button:disabled{opacity:.5;cursor:wait}.secondary{background:#294157;color:white}.approve{background:#1d684e;color:white}.reject{background:#793c42;color:white}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{background:#102131;border:1px solid var(--line);border-radius:12px;padding:16px}.stat strong{display:block;font-size:26px;color:var(--gold);margin-top:8px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.row button{flex:0 0 auto}.hidden{display:none!important}.msg{padding:12px;border-radius:10px;background:#203b4f;margin:12px 0}.error{color:#ffb3ad}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:900px}th,td{text-align:right;padding:12px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--gold);font-size:13px;white-space:nowrap}.pill{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;background:#33495b}.pending{background:#705322}.approved{background:#1d684e}.rejected{background:#793c42}.actions{display:flex;gap:7px;flex-wrap:wrap}.actions button{padding:8px 11px;font-size:12px}.empty{text-align:center;padding:30px;color:var(--muted)}
+@media(max-width:760px){.wrap{padding:12px}.grid,.stats{grid-template-columns:repeat(2,1fr)}.panel{padding:15px}.brand h1{font-size:17px}}
+@media(max-width:420px){.grid,.stats{grid-template-columns:1fr}}
+</style></head>
+<body><main class="wrap">
+<header class="brand"><div class="mark">EG</div><div><h1>شركة الغازي للمقاولات والتوريدات</h1><small>EL-GHAZY ERP · لوحة إدارة تشغيل المعدات</small></div></header>
+<section id="login" class="panel" style="max-width:460px;margin:35px auto"><h2>دخول الإدارة</h2>
+<label>البريد الإلكتروني</label><input id="email" type="email" autocomplete="username" placeholder="admin@company.com">
+<label>كلمة المرور</label><input id="password" type="password" autocomplete="current-password" placeholder="كلمة المرور">
+<button id="loginBtn" style="width:100%;margin-top:16px">تسجيل الدخول</button><div id="loginMsg" class="msg hidden"></div>
+</section>
+<section id="dashboard" class="hidden">
+<div class="panel"><div class="row"><div><h2 id="welcome">لوحة متابعة التشغيل</h2><small>مراجعة سجلات السائقين واعتمادها أو رفضها.</small></div><button class="secondary" id="refreshBtn">تحديث البيانات</button><button class="secondary" id="logoutBtn">تسجيل الخروج</button></div></div>
+<div class="stats">
+<div class="stat"><small>إجمالي السجلات المعروضة</small><strong id="totalCount">0</strong></div>
+<div class="stat"><small>قيد المراجعة</small><strong id="pendingCount">0</strong></div>
+<div class="stat"><small>معتمد</small><strong id="approvedCount">0</strong></div>
+<div class="stat"><small>مرفوض</small><strong id="rejectedCount">0</strong></div>
+</div>
+<div class="panel"><h2>سجلات التشغيل</h2>
+<div class="grid">
+<div><label>حالة السجل</label><select id="statusFilter"><option value="all">كل الحالات</option><option value="pending">قيد المراجعة</option><option value="approved">معتمد</option><option value="rejected">مرفوض</option></select></div>
+<div><label>من تاريخ</label><input id="fromDate" type="date"></div>
+<div><label>إلى تاريخ</label><input id="toDate" type="date"></div>
+<div><label>بحث</label><input id="search" placeholder="اسم السائق أو المعدة أو المشروع"></div>
+</div>
+<div id="dataMsg" class="msg hidden"></div>
+<div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>السائق</th><th>المعدة</th><th>المشروع</th><th>الساعات</th><th>طريقة التسجيل</th><th>الحالة</th><th>ملاحظات</th><th>إجراء</th></tr></thead><tbody id="records"><tr><td colspan="9" class="empty">تحميل البيانات...</td></tr></tbody></table></div>
+</div></section></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+const SUPABASE_URL='https://csogzlzqinczlxdotfmb.supabase.co';
+const SUPABASE_KEY='sb_publishable_0xEG3oh5o_bPX3C42dBwcQ_Uk3-4SEt';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id);let currentUser=null,rows=[];
+const labels={pending:'قيد المراجعة',approved:'معتمد',rejected:'مرفوض'};
+function message(id,text,bad){$(id).textContent=text;$(id).classList.remove('hidden');$(id).classList.toggle('error',!!bad)}
+function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function dateOnly(v){return v?new Date(v+'T00:00:00').toLocaleDateString('ar-EG'):'—'}
+async function verifySession(){
+ const {data:{session}}=await sb.auth.getSession();if(!session)return;
+ currentUser=session.user;
+ const {data:profile,error}=await sb.from('profiles').select('full_name,role,is_active').eq('id',currentUser.id).single();
+ if(error)throw error;
+ if(!profile||!profile.is_active||!['owner','system_admin','equipment_manager'].includes(profile.role))throw Error('هذا الحساب غير مصرح له بدخول لوحة الإدارة.');
+ $('welcome').textContent='مرحباً '+(profile.full_name||'بك')+' — لوحة متابعة التشغيل';
+ $('login').classList.add('hidden');$('dashboard').classList.remove('hidden');await loadRows();
+}
+async function loadRows(){
+ $('records').innerHTML='<tr><td colspan="9" class="empty">جاري تحميل السجلات...</td></tr>';
+ const [ops,drivers,equipment,projects,profiles]=await Promise.all([
+  sb.from('operation_logs').select('id,driver_id,equipment_id,project_id,operation_date,operating_hours,status,entry_mode,notes,rejection_reason,created_at,started_at,ended_at').order('created_at',{ascending:false}).limit(300),
+  sb.from('drivers').select('id,employee_number,profile_id'),
+  sb.from('equipment').select('id,name,equipment_code'),
+  sb.from('projects').select('id,name,project_code'),
+  sb.from('profiles').select('id,full_name')
+ ]);
+ for(const r of [ops,drivers,equipment,projects,profiles])if(r.error)throw r.error;
+ const dm=Object.fromEntries(drivers.data.map(x=>[x.id,x])),em=Object.fromEntries(equipment.data.map(x=>[x.id,x])),pm=Object.fromEntries(projects.data.map(x=>[x.id,x])),prm=Object.fromEntries(profiles.data.map(x=>[x.id,x]));
+ rows=ops.data.map(x=>({...x,driver:dm[x.driver_id],driverName:prm[dm[x.driver_id]?.profile_id]?.full_name||('موظف '+(dm[x.driver_id]?.employee_number||'')),equipment:em[x.equipment_id],project:pm[x.project_id]}));
+ render();
+}
+function render(){
+ const status=$('statusFilter').value,from=$('fromDate').value,to=$('toDate').value,q=$('search').value.trim().toLowerCase();
+ const filtered=rows.filter(x=>(status==='all'||x.status===status)&&(!from||x.operation_date>=from)&&(!to||x.operation_date<=to)&&(!q||[x.driverName,x.equipment?.name,x.equipment?.equipment_code,x.project?.name,x.notes].join(' ').toLowerCase().includes(q)));
+ $('totalCount').textContent=rows.length;$('pendingCount').textContent=rows.filter(x=>x.status==='pending').length;$('approvedCount').textContent=rows.filter(x=>x.status==='approved').length;$('rejectedCount').textContent=rows.filter(x=>x.status==='rejected').length;
+ if(!filtered.length){$('records').innerHTML='<tr><td colspan="9" class="empty">لا توجد سجلات مطابقة.</td></tr>';return}
+ $('records').innerHTML=filtered.map(x=>'<tr><td>'+dateOnly(x.operation_date)+'</td><td>'+escapeHtml(x.driverName)+'</td><td>'+escapeHtml(x.equipment?.name||x.equipment?.equipment_code||'—')+'</td><td>'+escapeHtml(x.project?.name||'—')+'</td><td>'+escapeHtml(x.operating_hours??'—')+'</td><td>'+(x.entry_mode==='automatic'?'تلقائي':'يدوي')+'</td><td><span class="pill '+escapeHtml(x.status)+'">'+(labels[x.status]||escapeHtml(x.status))+'</span>'+(x.rejection_reason?'<br><small>'+escapeHtml(x.rejection_reason)+'</small>':'')+'</td><td>'+escapeHtml(x.notes||'—')+'</td><td>'+(x.status==='pending'?'<div class="actions"><button class="approve" data-action="approve" data-id="'+x.id+'">اعتماد</button><button class="reject" data-action="reject" data-id="'+x.id+'">رفض</button></div>':'—')+'</td></tr>').join('');
+}
+async function review(id,status){
+ const record=rows.find(x=>x.id===id);if(!record||record.status!=='pending')return;
+ let reason=null;if(status==='rejected'){reason=prompt('اكتب سبب رفض سجل التشغيل:');if(reason===null)return;if(!reason.trim()){alert('يجب كتابة سبب الرفض.');return}}
+ if(!confirm(status==='approved'?'تأكيد اعتماد سجل التشغيل؟':'تأكيد رفض سجل التشغيل؟'))return;
+ const {error}=await sb.from('operation_logs').update({status,reviewed_by:currentUser.id,reviewed_at:new Date().toISOString(),rejection_reason:reason}).eq('id',id).eq('status','pending');
+ if(error){message('dataMsg','تعذر تحديث السجل: '+error.message,true);return}
+ message('dataMsg',status==='approved'?'تم اعتماد السجل.':'تم رفض السجل وتسجيل السبب.',false);await loadRows();
+}
+$('records').addEventListener('click',e=>{const b=e.target.closest('button[data-action]');if(b)review(b.dataset.id,b.dataset.action==='approve'?'approved':'rejected')});
+$('loginBtn').onclick=async()=>{const b=$('loginBtn');b.disabled=true;try{const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)throw error;await verifySession()}catch(e){message('loginMsg',e.message||'تعذر تسجيل الدخول',true)}finally{b.disabled=false}};
+$('password').addEventListener('keydown',e=>{if(e.key==='Enter')$('loginBtn').click()});
+$('refreshBtn').onclick=()=>loadRows().catch(e=>message('dataMsg','تعذر تحميل البيانات: '+e.message,true));
+$('logoutBtn').onclick=async()=>{await sb.auth.signOut();location.reload()};
+['statusFilter','fromDate','toDate','search'].forEach(id=>$(id).addEventListener('input',render));
+verifySession().catch(e=>{message('loginMsg',e.message||'تعذر التحقق من صلاحيات الحساب',true);sb.auth.signOut();});
+})();
+</script></body></html>
