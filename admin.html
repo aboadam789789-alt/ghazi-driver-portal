@@ -6,7 +6,7 @@
 <style>
 :root{color-scheme:dark;--bg:#0b1420;--panel:#172737;--line:#2c4257;--gold:#d9ad58;--txt:#f2f6fa;--muted:#9fb1c1;--green:#48c78e;--red:#f07878;--blue:#78b7ed}
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(140deg,#0b1420,#14283a);color:var(--txt);font-family:Tahoma,Arial,sans-serif;min-height:100vh}
-.wrap{max-width:1240px;margin:auto;padding:22px}.brand{display:flex;align-items:center;gap:12px;margin:8px 0 22px}.mark{width:50px;height:50px;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold);font-weight:900}.brand h1{font-size:21px;margin:0}.muted,small{color:var(--muted)}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 12px 30px #0003}
+.wrap{max-width:1240px;margin:auto;padding:22px}.brand{display:flex;align-items:center;gap:12px;margin:8px 0 22px}.company-logo{width:62px;height:62px;object-fit:contain;flex:0 0 auto;border-radius:50%}.brand h1{font-size:21px;margin:0}.muted,small{color:var(--muted)}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 12px 30px #0003}
 h2{font-size:18px;margin:0 0 15px}label{display:block;color:#c4d1dc;font-size:13px;margin:12px 0 6px}
 input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;background:#0e1b28;color:white;font:inherit}button{border:0;border-radius:9px;padding:11px 16px;background:var(--gold);color:#172331;font:inherit;font-weight:bold;cursor:pointer}button:disabled{opacity:.5;cursor:wait}.secondary{background:#294157;color:white}.approve{background:#1d684e;color:white}.reject{background:#793c42;color:white}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{background:#102131;border:1px solid var(--line);border-radius:12px;padding:16px}.stat strong{display:block;font-size:26px;color:var(--gold);margin-top:8px}
@@ -15,7 +15,7 @@ input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);borde
 @media(max-width:420px){.grid,.stats{grid-template-columns:1fr}}
 </style></head>
 <body><main class="wrap">
-<header class="brand"><div class="mark">EG</div><div><h1>شركة الغازي للمقاولات والتوريدات</h1><small>EL-GHAZY ERP · لوحة إدارة تشغيل المعدات</small></div></header>
+<header class="brand"><img class="company-logo" src="/assets/el-ghazy-logo.webp" alt="شعار شركة الغازي للمقاولات والتوريدات"><div><h1>شركة الغازي للمقاولات والتوريدات</h1><small>EL-GHAZY ERP · لوحة إدارة تشغيل المعدات</small></div></header>
 <section id="login" class="panel" style="max-width:460px;margin:35px auto"><h2>دخول الإدارة</h2>
 <label>البريد الإلكتروني</label><input id="email" type="email" autocomplete="username" placeholder="admin@company.com">
 <label>كلمة المرور</label><input id="password" type="password" autocomplete="current-password" placeholder="كلمة المرور">
