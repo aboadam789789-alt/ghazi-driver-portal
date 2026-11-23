@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>التقرير المالي للمشروعات | EL-GHAZY ERP</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1420;--panel:#172737;--line:#2c4257;--gold:#d9ad58;--txt:#f2f6fa;--muted:#9fb1c1;--green:#48c78e;--blue:#78b7ed;--red:#f07878}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(140deg,#0b1420,#14283a);color:var(--txt);font-family:Tahoma,Arial,sans-serif;min-height:100vh}
+.wrap{max-width:1320px;margin:auto;padding:22px}.brand{display:flex;align-items:center;gap:12px;margin:8px 0 22px}.company-logo{width:62px;height:62px;object-fit:contain;border-radius:50%}.brand h1{font-size:21px;margin:0}.muted,small{color:var(--muted)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 12px 30px #0003}
+h2{font-size:18px;margin:0 0 15px}label{display:block;color:#c4d1dc;font-size:13px;margin:12px 0 6px}
+input,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:#0e1b28;color:white;font:inherit}
+button,.nav a{border:0;border-radius:9px;padding:11px 15px;background:var(--gold);color:#172331;font:inherit;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block}
+button.secondary,.nav a{background:#294157;color:white}button:disabled{opacity:.5;cursor:wait}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.stat{background:#102131;border:1px solid var(--line);border-radius:12px;padding:16px}.stat strong{display:block;font-size:24px;color:var(--gold);margin-top:8px;overflow-wrap:anywhere}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.row button,.row a{flex:0 0 auto}.hidden{display:none!important}.msg{padding:12px;border-radius:10px;background:#203b4f;margin:12px 0}.error{color:#ffb3ad}
+.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:780px}th,td{text-align:right;padding:11px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--gold);font-size:13px;white-space:nowrap}.empty{text-align:center;padding:28px;color:var(--muted)}
+.bars{display:grid;gap:10px}.bar-row{display:grid;grid-template-columns:minmax(100px,1fr) 3fr auto;gap:10px;align-items:center}.bar-track{height:12px;background:#0e1b28;border-radius:10px;overflow:hidden}.bar-fill{height:100%;background:var(--gold);border-radius:10px}
+.pill{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;background:#33495b}.note{border-right:3px solid var(--gold);padding:10px 13px;background:#102131;color:#c4d1dc;border-radius:8px;line-height:1.8}
+@media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.wrap{padding:12px}.grid,.stats{grid-template-columns:1fr}.panel{padding:15px}.brand h1{font-size:17px}.bar-row{grid-template-columns:1fr auto}.bar-track{grid-column:1/-1;grid-row:2}}
+@media print{body{background:white;color:#111}.panel,.stat{background:white;color:#111;box-shadow:none;border:1px solid #bbb}.muted,small{color:#555}button,.nav,#login,.filters,.no-print{display:none!important}th{color:#333}td,th{border-color:#bbb}.stat strong{color:#111}.wrap{max-width:none;padding:0}}
+</style></head>
+<body><main class="wrap">
+<header class="brand"><img class="company-logo" src="/assets/el-ghazy-logo.webp" alt="شعار شركة الغازي للمقاولات والتوريدات"><div><h1>شركة الغازي للمقاولات والتوريدات</h1><small>EL-GHAZY ERP · التقرير المالي الموحد للمشروعات</small></div></header>
+<section id="login" class="panel" style="max-width:460px;margin:35px auto"><h2>دخول الإدارة المالية</h2>
+<label>البريد الإلكتروني</label><input id="email" type="email" autocomplete="username">
+<label>كلمة المرور</label><input id="password" type="password" autocomplete="current-password">
+<button id="loginBtn" style="width:100%;margin-top:16px">تسجيل الدخول</button><div id="loginMsg" class="msg hidden"></div>
+</section>
+<section id="dashboard" class="hidden">
+<div class="panel"><div class="row"><div><h2>التكلفة الفعلية المسجلة للمشروعات</h2><small>تجميع العمالة والمعدات والتوريدات حسب المشروع والفترة.</small></div><nav class="nav row"><a href="admin.html">لوحة الإدارة</a><a href="hr.html">الموارد البشرية</a></nav><button class="secondary" id="refreshBtn">تحديث</button><button class="secondary" id="logoutBtn">خروج</button></div></div>
+<div class="panel filters"><h2>فلاتر التقرير</h2><div class="grid">
+<div><label>من تاريخ</label><input id="fromDate" type="date"></div>
+<div><label>إلى تاريخ</label><input id="toDate" type="date"></div>
+<div><label>المشروع</label><select id="projectFilter"><option value="all">كل المشروعات</option><option value="unassigned">غير موزع</option></select></div>
+<div><label>نوع التكلفة</label><select id="typeFilter"><option value="all">كل البنود</option><option value="labor">العمالة</option><option value="equipment">مصروفات المعدات</option><option value="supply">التوريدات والمواد</option></select></div>
+</div><div class="row" style="margin-top:14px"><button id="applyBtn">تطبيق الفلاتر</button><button class="secondary" id="csvBtn">تصدير CSV</button><button class="secondary" id="printBtn">طباعة / PDF</button></div></div>
+<div id="dataMsg" class="msg hidden"></div>
+<div class="stats">
+<div class="stat"><small>إجمالي التكلفة المسجلة</small><strong id="totalCost">0.00 ج.م</strong></div>
+<div class="stat"><small>تكلفة العمالة</small><strong id="laborCost">0.00 ج.م</strong></div>
+<div class="stat"><small>مصروفات المعدات</small><strong id="equipmentCost">0.00 ج.م</strong></div>
+<div class="stat"><small>التوريدات والمواد</small><strong id="supplyCost">0.00 ج.م</strong></div>
+<div class="stat"><small>ساعات تشغيل معتمدة</small><strong id="operatingHours">0.00</strong></div>
+</div>
+<div class="panel"><h2>ملخص التكلفة حسب المشروع</h2><div id="projectBars" class="bars"><div class="empty">تحميل التقرير...</div></div></div>
+<div class="panel"><h2>التكلفة الشهرية</h2><div class="table-wrap"><table><thead><tr><th>الشهر</th><th>العمالة</th><th>المعدات</th><th>التوريدات</th><th>الإجمالي</th></tr></thead><tbody id="monthlyRows"><tr><td colspan="5" class="empty">تحميل...</td></tr></tbody></table></div></div>
+<div class="panel"><h2>تفاصيل بنود التكلفة</h2><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>المشروع</th><th>البند</th><th>البيان</th><th>الكمية</th><th>القيمة</th></tr></thead><tbody id="detailRows"><tr><td colspan="6" class="empty">تحميل...</td></tr></tbody></table></div></div>
+<div class="note">ملاحظات منهجية: تكلفة العمالة = الأساسي + المكافآت − الخصومات، ولا تُخصم السلف منها مرة أخرى. لا تُدرج كشوف الرواتب المسودة أو الملغاة. ساعات تشغيل المعدات مؤشر تشغيلي مستقل؛ لا تتحول إلى تكلفة نقدية إلا عند تسجيل سعر تشغيل معتمد. هذا التقرير يعرض التكاليف المسجلة فقط، ولا يحسب الإيرادات أو الربح لعدم وجود بيانات عقد/إيراد مرتبطة في البنية الحالية.</div>
+</section></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+const SUPABASE_URL='https://csogzlzqinczlxdotfmb.supabase.co';
+const SUPABASE_KEY='sb_publishable_0xEG3oh5o_bPX3C42dBwcQ_Uk3-4SEt';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id);
+let allCosts=[],allProjects=[],allHours=[],currentUser=null;
+const labels={labor:'العمالة',equipment:'مصروفات المعدات',supply:'التوريدات والمواد'};
+const money=n=>Number(n||0).toLocaleString('ar-EG',{minimumFractionDigits:2,maximumFractionDigits:2})+' ج.م';
+const num=n=>Number(n||0).toLocaleString('ar-EG',{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function msg(id,text,bad){$(id).textContent=text;$(id).classList.remove('hidden');$(id).classList.toggle('error',!!bad)}
+function isoStart(){const d=new Date();return d.getFullYear()+'-01-01'}
+function isoToday(){return new Date().toISOString().slice(0,10)}
+async function verifySession(){
+ const {data:{session}}=await sb.auth.getSession();if(!session)return;
+ currentUser=session.user;
+ const {data:p,error}=await sb.from('profiles').select('full_name,role,is_active').eq('id',currentUser.id).single();
+ if(error)throw error;
+ if(!p||!p.is_active||!['owner','system_admin'].includes(p.role))throw Error('هذا التقرير متاح لمالك النظام ومدير النظام فقط.');
+ $('login').classList.add('hidden');$('dashboard').classList.remove('hidden');
+ $('fromDate').value=isoStart();$('toDate').value=isoToday();
+ await loadData();
+}
+async function loadData(){
+ $('refreshBtn').disabled=true;
+ try{
+  const [costs,projects,ops]=await Promise.all([
+   sb.from('project_financial_costs').select('source_type,source_label,source_id,project_id,cost_date,amount,quantity,unit,description').order('cost_date',{ascending:false}).limit(10000),
+   sb.from('projects').select('id,name,project_code').order('name'),
+   sb.from('operation_logs').select('project_id,operation_date,operating_hours').eq('status','approved').limit(10000)
+  ]);
+  for(const r of [costs,projects,ops])if(r.error)throw r.error;
+  allCosts=costs.data||[];allProjects=projects.data||[];allHours=ops.data||[];
+  $('projectFilter').innerHTML='<option value="all">كل المشروعات</option><option value="unassigned">غير موزع</option>'+allProjects.map(p=>'<option value="'+p.id+'">'+esc(p.name)+'</option>').join('');
+  render();
+ }catch(e){msg('dataMsg','تعذر تحميل التقرير: '+e.message,true)}
+ finally{$('refreshBtn').disabled=false}
+}
+function filtered(){
+ const from=$('fromDate').value,to=$('toDate').value,project=$('projectFilter').value,type=$('typeFilter').value;
+ return allCosts.filter(x=>(!from||x.cost_date>=from)&&(!to||x.cost_date<=to)&&(project==='all'||(project==='unassigned'?!x.project_id:x.project_id===project))&&(type==='all'||x.source_type===type));
+}
+function render(){
+ const rows=filtered(),pm=Object.fromEntries(allProjects.map(p=>[p.id,p.name]));
+ const sums={labor:0,equipment:0,supply:0};rows.forEach(x=>sums[x.source_type]=(sums[x.source_type]||0)+Number(x.amount||0));
+ const total=Object.values(sums).reduce((a,b)=>a+b,0);
+ $('totalCost').textContent=money(total);$('laborCost').textContent=money(sums.labor);$('equipmentCost').textContent=money(sums.equipment);$('supplyCost').textContent=money(sums.supply);
+ const from=$('fromDate').value,to=$('toDate').value;
+ const hours=allHours.filter(x=>(!from||x.operation_date>=from)&&(!to||x.operation_date<=to)&&($('projectFilter').value==='all'||($('projectFilter').value==='unassigned'?!x.project_id:x.project_id===$('projectFilter').value))).reduce((s,x)=>s+Number(x.operating_hours||0),0);
+ $('operatingHours').textContent=num(hours);
+ const byProject={};rows.forEach(x=>{const k=x.project_id||'unassigned';byProject[k]=(byProject[k]||0)+Number(x.amount||0)});
+ const projectEntries=Object.entries(byProject).sort((a,b)=>b[1]-a[1]),max=Math.max(1,...projectEntries.map(x=>x[1]));
+ $('projectBars').innerHTML=projectEntries.length?projectEntries.map(([id,v])=>'<div class="bar-row"><span>'+esc(id==='unassigned'?'غير موزع':pm[id]||'مشروع غير معروف')+'</span><div class="bar-track"><div class="bar-fill" style="width:'+Math.max(0,Math.min(100,v/max*100))+'%"></div></div><strong>'+money(v)+'</strong></div>').join(''):'<div class="empty">لا توجد تكاليف مسجلة في الفترة المحددة.</div>';
+ const byMonth={};rows.forEach(x=>{const m=String(x.cost_date||'').slice(0,7)||'غير محدد';if(!byMonth[m])byMonth[m]={labor:0,equipment:0,supply:0};byMonth[m][x.source_type]+=Number(x.amount||0)});
+ const months=Object.entries(byMonth).sort((a,b)=>b[0].localeCompare(a[0]));
+ $('monthlyRows').innerHTML=months.length?months.map(([m,v])=>'<tr><td>'+esc(m)+'</td><td>'+money(v.labor)+'</td><td>'+money(v.equipment)+'</td><td>'+money(v.supply)+'</td><td><strong>'+money(v.labor+v.equipment+v.supply)+'</strong></td></tr>').join(''):'<tr><td colspan="5" class="empty">لا توجد بيانات شهرية للفترة المحددة.</td></tr>';
+ $('detailRows').innerHTML=rows.length?rows.map(x=>'<tr><td>'+esc(x.cost_date)+'</td><td>'+esc(x.project_id?(pm[x.project_id]||'مشروع غير معروف'):'غير موزع')+'</td><td><span class="pill">'+esc(labels[x.source_type]||x.source_label)+'</span></td><td>'+esc(x.description||x.source_label||'—')+'</td><td>'+((x.quantity!==null&&x.quantity!==undefined)?num(x.quantity)+' '+esc(x.unit||''):'—')+'</td><td><strong>'+money(x.amount)+'</strong></td></tr>').join(''):'<tr><td colspan="6" class="empty">لا توجد بنود تكلفة مسجلة. ستظهر البيانات بعد إدخال بيانات التشغيل الفعلية.</td></tr>';
+}
+function csv(){
+ const rows=filtered(),pm=Object.fromEntries(allProjects.map(p=>[p.id,p.name]));
+ const head=['التاريخ','المشروع','نوع التكلفة','البيان','الكمية','الوحدة','القيمة بالجنيه'];
+ const data=rows.map(x=>[x.cost_date,x.project_id?(pm[x.project_id]||'مشروع غير معروف'):'غير موزع',labels[x.source_type]||x.source_label,x.description,x.quantity??'',x.unit??'',x.amount]);
+ const quote=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+ const csvText='\ufeff'+[head,...data].map(r=>r.map(quote).join(',')).join('\r\n');
+ const blob=new Blob([csvText],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='el-ghazy-project-financial-costs.csv';a.click();URL.revokeObjectURL(url);
+}
+$('loginBtn').onclick=async()=>{const b=$('loginBtn');b.disabled=true;try{const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)throw error;await verifySession()}catch(e){msg('loginMsg',e.message||'تعذر تسجيل الدخول',true)}finally{b.disabled=false}};
+$('password').addEventListener('keydown',e=>{if(e.key==='Enter')$('loginBtn').click()});
+$('applyBtn').onclick=render;$('refreshBtn').onclick=loadData;$('csvBtn').onclick=csv;$('printBtn').onclick=()=>window.print();
+$('logoutBtn').onclick=async()=>{await sb.auth.signOut();location.reload()};
+verifySession().catch(e=>{msg('loginMsg',e.message||'تعذر التحقق من الصلاحيات',true);sb.auth.signOut()});
+})();
+</script></body></html>
