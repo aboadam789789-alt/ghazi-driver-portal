@@ -142,7 +142,7 @@ $('adjustments').addEventListener('click',async e=>{const b=e.target.closest('[d
 async function generatePayroll(){
  const month=$('payrollMonth').value;if(!month)throw Error('اختر شهر المرتب.');
  const monthDate=monthStart(month),parts=month.split('-').map(Number),lastDay=new Date(parts[0],parts[1],0).getDate(),monthEnd=month+'-'+String(lastDay).padStart(2,'0');
- if(data.payrollRuns.some(x=>x.payroll_month===monthDate))throw Error('يوجد كشف مرتب لهذا الشهر بالفعل.');
+ if(data.payrollRuns.some(x=>x.payroll_month===monthDate&&x.status!=='cancelled'))throw Error('يوجد كشف مرتب غير ملغي لهذا الشهر بالفعل.');
  const employees=data.employees.filter(x=>x.employment_status!=='terminated');
  const salaryByEmployee=new Map();
  for(const e of employees){const matches=data.salaries.filter(s=>s.employee_id===e.id&&s.effective_from<=monthEnd&&(!s.effective_to||s.effective_to>=monthDate)).sort((a,b)=>b.effective_from.localeCompare(a.effective_from));if(matches[0])salaryByEmployee.set(e.id,Number(matches[0].monthly_salary))}
