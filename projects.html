@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>متابعة المشروعات | EL-GHAZY ERP</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1420;--panel:#172737;--line:#2c4257;--gold:#d9ad58;--txt:#f2f6fa;--muted:#9fb1c1;--green:#48c78e;--red:#f07878;--blue:#78b7ed;--amber:#e8b65b}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(140deg,#0b1420,#14283a);color:var(--txt);font-family:Tahoma,Arial,sans-serif;min-height:100vh}.wrap{max-width:1380px;margin:auto;padding:22px}.brand{display:flex;align-items:center;gap:12px;margin:8px 0 22px}.company-logo{width:62px;height:62px;object-fit:contain;flex:0 0 auto;border-radius:50%}.brand h1{font-size:21px;margin:0}.muted,small{color:var(--muted)}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin:14px 0;box-shadow:0 12px 30px #0003}h2{font-size:18px;margin:0 0 15px}h3{font-size:15px;margin:0 0 10px;color:var(--gold)}label{display:block;color:#c4d1dc;font-size:13px;margin:10px 0 6px}input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:#0e1b28;color:white;font:inherit}textarea{min-height:72px;resize:vertical}button,.linkbtn{border:0;border-radius:9px;padding:10px 15px;background:var(--gold);color:#172331;font:inherit;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block}button:disabled{opacity:.5;cursor:wait}.secondary{background:#294157;color:white}.approve{background:#1d684e;color:white}.reject{background:#793c42;color:white}.hidden{display:none!important}.msg{padding:11px;border-radius:9px;background:#203b4f;margin:10px 0}.error{color:#ffb3ad}.success{color:#a8f0ce}.nav{display:flex;gap:8px;flex-wrap:wrap}.nav a{background:#294157;color:white;border-radius:9px;padding:10px 13px;text-decoration:none;font-weight:bold;font-size:13px}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.stat{background:#102131;border:1px solid var(--line);border-radius:12px;padding:14px;min-height:94px}.stat small{display:block}.stat strong{display:block;color:var(--gold);font-size:25px;margin-top:7px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.grid.two{grid-template-columns:repeat(2,1fr)}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.row button,.row a{flex:0 0 auto}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button{background:#294157;color:white}.tabs button.active{background:var(--gold);color:#172331}.tab{display:none}.tab.active{display:block}.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.project-card{background:#102131;border:1px solid var(--line);border-radius:13px;padding:15px}.project-card h3{margin-bottom:5px}.progress{height:10px;background:#263d50;border-radius:99px;overflow:hidden;margin:9px 0}.progress span{display:block;height:100%;background:var(--green);border-radius:99px}.pill{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;background:#33495b}.pill.good{background:#1d684e}.pill.warn{background:#705322}.pill.bad{background:#793c42}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:780px}th,td{text-align:right;padding:11px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--gold);font-size:13px;white-space:nowrap}.empty{text-align:center;padding:25px;color:var(--muted)}.actions{display:flex;gap:6px;flex-wrap:wrap}.actions button{padding:7px 10px;font-size:12px}.form-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.hint{font-size:12px;color:var(--muted);line-height:1.7}.toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+@media(max-width:900px){.stats{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:620px){.wrap{padding:11px}.brand{align-items:flex-start}.company-logo{width:52px;height:52px}.brand h1{font-size:17px}.stats{grid-template-columns:repeat(2,1fr)}.grid,.grid.two,.cards{grid-template-columns:1fr}.panel{padding:14px}}
+</style>
+</head>
+<body><main class="wrap">
+<header class="brand">
+<img class="company-logo" src="/assets/el-ghazy-logo.webp" alt="شعار شركة الغازي للمقاولات والتوريدات">
+<div><h1>شركة الغازي للمقاولات والتوريدات</h1><small>EL-GHAZY ERP · PROJECT CONTROL CENTER</small></div>
+</header>
+<section id="login" class="panel" style="max-width:460px;margin:35px auto">
+<h2>دخول الإدارة</h2><label>البريد الإلكتروني</label><input id="email" type="email" autocomplete="username">
+<label>كلمة المرور</label><input id="password" type="password" autocomplete="current-password">
+<button id="loginBtn" style="width:100%;margin-top:14px">تسجيل الدخول</button><div id="loginMsg" class="msg hidden"></div>
+</section>
+<section id="app" class="hidden">
+<div class="panel toolbar">
+<div><h2 id="welcome">لوحة متابعة المشروعات</h2><small>مؤشرات الإدارة ومتابعة الإنجاز الفعلي والقرارات.</small></div>
+<nav class="nav"><a href="admin.html">لوحة التشغيل</a><a href="hr.html">الموارد البشرية</a><a href="finance.html">التقرير المالي</a></nav>
+<div class="row"><button id="refreshBtn" class="secondary">تحديث البيانات</button><button id="logoutBtn" class="secondary">تسجيل الخروج</button></div>
+</div>
+<div class="stats">
+<div class="stat"><small>المشاريع النشطة</small><strong id="activeCount">—</strong></div>
+<div class="stat"><small>متوسط الإنجاز الموثق</small><strong id="avgProgress">—</strong></div>
+<div class="stat"><small>المهام المتأخرة</small><strong id="overdueTasks">—</strong></div>
+<div class="stat"><small>المهام المتوقفة</small><strong id="blockedTasks">—</strong></div>
+<div class="stat"><small>قرارات معلقة</small><strong id="pendingDecisions">—</strong></div>
+</div>
+<div id="appMsg" class="msg hidden"></div>
+<div class="panel"><nav class="tabs" id="tabs">
+<button class="active" data-tab="overview">نظرة عامة</button><button data-tab="projects">المشاريع</button><button data-tab="phases">المراحل والمهام</button><button data-tab="updates">اعتماد الإنجاز</button><button data-tab="actions">العقبات والقرارات</button>
+</nav></div>
+<section id="overview" class="panel tab active">
+<div class="toolbar"><div><h2>ملخص محفظة المشروعات</h2><small>تعرض هذه اللوحة المشاريع المسجلة فعلياً في قاعدة البيانات فقط.</small></div><small id="lastRefresh">—</small></div>
+<div id="projectCards" class="cards"><div class="empty">تحميل المشاريع...</div></div>
+<div class="hint">طريقة الحساب: متوسط إنجاز المهام داخل المرحلة وفق أوزانها، ثم متوسط المراحل وفق أوزانها. لا تُحتسب تحديثات الإنجاز إلا بعد اعتمادها.</div>
+</section>
+<section id="projects" class="panel tab">
+<h2>سجل المشاريع</h2>
+<form id="projectForm">
+<div class="grid">
+<div><label>اسم المشروع *</label><input id="projectName" required maxlength="180"></div>
+<div><label>كود المشروع</label><input id="projectCode" maxlength="60"></div>
+<div><label>العميل</label><input id="clientName" maxlength="180"></div>
+<div><label>مدير المشروع</label><input id="managerName" maxlength="180"></div>
+<div><label>الموقع</label><input id="projectLocation" maxlength="180"></div>
+<div><label>الحالة</label><select id="projectStatus"><option value="active">نشط</option><option value="paused">متوقف مؤقتاً</option><option value="completed">مكتمل</option></select></div>
+<div><label>تاريخ البداية</label><input id="projectStart" type="date"></div>
+<div><label>تاريخ التسليم المخطط</label><input id="projectEnd" type="date"></div>
+</div>
+<div class="form-actions"><button type="submit">إضافة مشروع</button></div>
+</form>
+<div id="projectFormMsg" class="msg hidden"></div>
+<div class="table-wrap"><table><thead><tr><th>المشروع</th><th>العميل</th><th>المدير</th><th>الحالة</th><th>البداية</th><th>التسليم</th><th>الإنجاز</th></tr></thead><tbody id="projectRows"><tr><td colspan="7" class="empty">لا توجد بيانات.</td></tr></tbody></table></div>
+</section>
+<section id="phases" class="panel tab">
+<div class="grid two">
+<div>
+<h2>إضافة مرحلة</h2>
+<form id="phaseForm">
+<label>المشروع *</label><select id="phaseProject" required></select>
+<label>اسم المرحلة *</label><input id="phaseTitle" required maxlength="180">
+<label>وصف المرحلة</label><textarea id="phaseDescription"></textarea>
+<div class="grid two"><div><label>ترتيب المرحلة</label><input id="phaseOrder" type="number" min="1" value="1" required></div><div><label>وزن المرحلة %</label><input id="phaseWeight" type="number" min="0" max="100" step=".01" value="0" required></div></div>
+<div class="grid two"><div><label>بداية مخططة</label><input id="phaseStart" type="date"></div><div><label>نهاية مخططة</label><input id="phaseEnd" type="date"></div></div>
+<button type="submit">حفظ المرحلة</button>
+</form><div id="phaseMsg" class="msg hidden"></div>
+</div>
+<div>
+<h2>إضافة مهمة</h2>
+<form id="taskForm">
+<label>المشروع *</label><select id="taskProject" required></select>
+<label>المرحلة *</label><select id="taskPhase" required></select>
+<label>اسم المهمة *</label><input id="taskTitle" required maxlength="180">
+<label>وصف المهمة</label><textarea id="taskDescription"></textarea>
+<div class="grid two"><div><label>المسؤول (اسم)</label><input id="taskResponsible" maxlength="180"></div><div><label>حساب المسؤول</label><select id="taskAssignee"></select></div></div>
+<div class="grid two"><div><label>ترتيب المهمة</label><input id="taskOrder" type="number" min="1" value="1" required></div><div><label>وزن المهمة داخل المرحلة %</label><input id="taskWeight" type="number" min="0" max="100" step=".01" value="0" required></div></div>
+<div class="grid two"><div><label>بداية مخططة</label><input id="taskStart" type="date"></div><div><label>نهاية مخططة</label><input id="taskEnd" type="date"></div></div>
+<button type="submit">حفظ المهمة</button>
+</form><div id="taskMsg" class="msg hidden"></div>
+</div>
+</div>
+<h2 style="margin-top:24px">قائمة المهام</h2>
+<div class="row"><div><label>تصفية حسب المشروع</label><select id="taskFilter"></select></div><div><label>بحث في المهام</label><input id="taskSearch" placeholder="اسم المهمة أو المسؤول"></div></div>
+<div class="table-wrap"><table><thead><tr><th>المشروع</th><th>المرحلة</th><th>المهمة</th><th>المسؤول</th><th>الوزن</th><th>الإنجاز المعتمد</th><th>الحالة</th><th>التسليم المخطط</th></tr></thead><tbody id="taskRows"><tr><td colspan="8" class="empty">لا توجد مهام مسجلة.</td></tr></tbody></table></div>
+</section>
+<section id="updates" class="panel tab">
+<div class="grid two">
+<div><h2>تسجيل تحديث إنجاز</h2>
+<form id="updateForm">
+<label>المشروع *</label><select id="updateProject" required></select>
+<label>المهمة *</label><select id="updateTask" required></select>
+<label>نسبة الإنجاز الجديدة % *</label><input id="updateProgress" type="number" min="0" max="100" step=".01" required>
+<label>تفاصيل التنفيذ والإثبات *</label><textarea id="updateNotes" required placeholder="اكتب ما تم تنفيذه وما يثبت ذلك..."></textarea>
+<label>رابط مستند أو صورة (اختياري)</label><input id="updateEvidence" type="url" placeholder="https://...">
+<button type="submit">إرسال للمراجعة</button>
+</form><div id="updateMsg" class="msg hidden"></div>
+</div>
+<div><h2>طلبات اعتماد الإنجاز</h2><div class="hint">لا تتغير نسبة المهمة في لوحة الإدارة حتى يعتمد المدير التحديث. عند الرفض يلزم تسجيل السبب.</div>
+<div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>المهمة</th><th>النسبة</th><th>التفاصيل</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="updateRows"><tr><td colspan="6" class="empty">لا توجد تحديثات.</td></tr></tbody></table></div>
+</div>
+</div>
+</section>
+<section id="actions" class="panel tab">
+<div class="grid two">
+<div><h2>تسجيل عقبة أو قرار</h2>
+<form id="actionForm">
+<label>المشروع *</label><select id="actionProject" required></select>
+<label>نوع السجل</label><select id="actionType"><option value="issue">عقبة / مشكلة</option><option value="decision">قرار مطلوب</option></select>
+<label>العنوان *</label><input id="actionTitle" required maxlength="180">
+<label>التفاصيل</label><textarea id="actionDescription"></textarea>
+<div class="grid two"><div><label>الأولوية</label><select id="actionPriority"><option value="low">منخفضة</option><option value="medium" selected>متوسطة</option><option value="high">مرتفعة</option><option value="critical">حرجة</option></select></div><div><label>تاريخ الاستحقاق</label><input id="actionDue" type="date"></div></div>
+<label>المسؤول</label><select id="actionAssignee"></select>
+<button type="submit">حفظ السجل</button>
+</form><div id="actionMsg" class="msg hidden"></div>
+</div>
+<div><h2>العقبات والقرارات المفتوحة</h2>
+<div class="table-wrap"><table><thead><tr><th>المشروع</th><th>النوع</th><th>العنوان</th><th>الأولوية</th><th>الحالة</th><th>الاستحقاق</th><th>إجراء</th></tr></thead><tbody id="actionRows"><tr><td colspan="7" class="empty">لا توجد سجلات.</td></tr></tbody></table></div>
+</div>
+</div>
+</section>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+const SUPABASE_URL='https://csogzlzqinczlxdotfmb.supabase.co';
+const SUPABASE_KEY='sb_publishable_0xEG3oh5o_bPX3C42dBwcQ_Uk3-4SEt';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id);
+let currentUser=null,projects=[],dashboard=[],phases=[],tasks=[],updates=[],actions=[],profiles=[];
+const roleNames={owner:'مالك الشركة',system_admin:'مدير النظام',equipment_manager:'مدير المعدات'};
+const projectStatuses={active:'نشط',paused:'متوقف مؤقتاً',completed:'مكتمل'};
+const taskStatuses={pending:'لم تبدأ',in_progress:'جارية',blocked:'متوقفة',completed:'مكتملة'};
+const updateStatuses={pending:'بانتظار الاعتماد',approved:'معتمد',rejected:'مرفوض'};
+const actionStatuses={open:'مفتوح',in_progress:'قيد المعالجة',waiting:'بانتظار قرار',closed:'مغلق'};
+const priorities={low:'منخفضة',medium:'متوسطة',high:'مرتفعة',critical:'حرجة'};
+const types={issue:'عقبة',decision:'قرار'};
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function msg(id,text,bad=false){$(id).textContent=text;$(id).classList.remove('hidden');$(id).classList.toggle('error',bad);$(id).classList.toggle('success',!bad)}
+function date(v){return v?new Date(v+'T00:00:00').toLocaleDateString('ar-EG'):'—'}
+function percent(v){return Number(v||0).toLocaleString('ar-EG',{maximumFractionDigits:1})+'%'}
+function selectOptions(id,items,label,empty='اختر المشروع'){const current=$(id).value;$(id).innerHTML='<option value="">'+empty+'</option>'+items.map(x=>'<option value="'+esc(x.id)+'">'+esc(label(x))+'</option>').join('');if(items.some(x=>x.id===current))$(id).value=current}
+function setProjectOptions(){const f=p=>p.name+(p.project_code?' · '+p.project_code:'');['phaseProject','taskProject','updateProject','actionProject'].forEach(id=>selectOptions(id,projects,f));$('taskFilter').innerHTML='<option value="all">كل المشاريع</option>'+projects.map(p=>'<option value="'+esc(p.id)+'">'+esc(f(p))+'</option>').join('');}
+function setPeopleOptions(){const html='<option value="">غير محدد</option>'+profiles.map(p=>'<option value="'+esc(p.id)+'">'+esc(p.full_name||'مستخدم')+'</option>').join('');$('taskAssignee').innerHTML=html;$('actionAssignee').innerHTML=html}
+function phaseOptions(projectId){const list=phases.filter(p=>p.project_id===projectId);selectOptions('taskPhase',list,p=>p.title,'اختر المرحلة')}
+function taskOptions(projectId){const list=tasks.filter(t=>t.project_id===projectId);selectOptions('updateTask',list,t=>{const ph=phases.find(p=>p.id===t.phase_id);return (ph?ph.title+' / ':'')+t.title+' · '+percent(t.progress_percent)})}
+async function verifySession(){
+ const {data:{session}}=await sb.auth.getSession();if(!session)return;
+ currentUser=session.user;
+ const {data:profile,error}=await sb.from('profiles').select('full_name,role,is_active').eq('id',currentUser.id).single();
+ if(error)throw error;
+ if(!profile||!profile.is_active||!['owner','system_admin','equipment_manager'].includes(profile.role))throw Error('هذا الحساب غير مصرح له بدخول لوحة متابعة المشروعات.');
+ $('welcome').textContent='مرحباً '+(profile.full_name||'بك')+' — '+(roleNames[profile.role]||'الإدارة');
+ $('login').classList.add('hidden');$('app').classList.remove('hidden');await loadData();
+}
+async function loadData(){
+ $('refreshBtn').disabled=true;
+ try{
+  const results=await Promise.all([
+   sb.from('projects').select('id,name,project_code,client_name,manager_name,location,status,is_active,start_date,end_date').eq('is_active',true).order('created_at',{ascending:false}),
+   sb.from('project_progress_dashboard').select('*').order('project_name'),
+   sb.from('project_phases').select('*').order('phase_order'),
+   sb.from('project_tasks').select('*').order('created_at',{ascending:false}),
+   sb.from('project_task_progress_updates').select('*').order('created_at',{ascending:false}).limit(300),
+   sb.from('project_action_items').select('*').order('created_at',{ascending:false}).limit(300),
+   sb.from('profiles').select('id,full_name,role').eq('is_active',true).order('full_name')
+  ]);
+  for(const r of results)if(r.error)throw r.error;
+  [projects,dashboard,phases,tasks,updates,actions,profiles]=results.map(r=>r.data||[]);
+  setProjectOptions();setPeopleOptions();phaseOptions($('taskProject').value);taskOptions($('updateProject').value);
+  renderAll();$('lastRefresh').textContent='آخر تحديث: '+new Date().toLocaleString('ar-EG');
+ }catch(e){msg('appMsg','تعذر تحميل بيانات المشروعات: '+e.message,true)}
+ finally{$('refreshBtn').disabled=false}
+}
+function renderAll(){renderStats();renderProjects();renderTasks();renderUpdates();renderActions()}
+function renderStats(){
+ $('activeCount').textContent=dashboard.length.toLocaleString('ar-EG');
+ const measurable=dashboard.filter(p=>Number(p.phase_count)>0);
+ $('avgProgress').textContent=measurable.length?percent(measurable.reduce((s,p)=>s+Number(p.actual_progress_percent||0),0)/measurable.length):'—';
+ $('overdueTasks').textContent=dashboard.reduce((s,p)=>s+Number(p.overdue_task_count||0),0).toLocaleString('ar-EG');
+ $('blockedTasks').textContent=dashboard.reduce((s,p)=>s+Number(p.blocked_task_count||0),0).toLocaleString('ar-EG');
+ $('pendingDecisions').textContent=dashboard.reduce((s,p)=>s+Number(p.pending_decision_count||0),0).toLocaleString('ar-EG');
+}
+function renderProjects(){
+ const cards=dashboard.map(p=>'<article class="project-card"><div class="toolbar"><div><h3>'+esc(p.project_name)+'</h3><small>'+esc(p.project_code||'بدون كود')+' · '+esc(p.manager_name||'لم يحدد مدير المشروع')+'</small></div><span class="pill '+(p.project_status==='completed'?'good':p.is_project_overdue?'bad':p.project_status==='paused'?'warn':'')+'">'+(projectStatuses[p.project_status]||esc(p.project_status))+'</span></div><div class="progress"><span style="width:'+Math.max(0,Math.min(100,Number(p.actual_progress_percent||0)))+'%"></span></div><strong>'+percent(p.actual_progress_percent)+'</strong><div class="hint">'+Number(p.phase_count||0)+' مرحلة · '+Number(p.task_count||0)+' مهمة · '+Number(p.blocked_task_count||0)+' متوقفة · '+Number(p.open_action_count||0)+' بند مفتوح</div></article>').join('');
+ $('projectCards').innerHTML=cards||'<div class="empty">لا توجد مشاريع نشطة مسجلة حالياً. أضف المشروع من تبويب المشاريع.</div>';
+ const rows=dashboard.map(p=>'<tr><td><strong>'+esc(p.project_name)+'</strong><br><small>'+esc(p.project_code||'بدون كود')+'</small></td><td>'+esc(p.client_name||'—')+'</td><td>'+esc(p.manager_name||'—')+'</td><td>'+esc(projectStatuses[p.project_status]||p.project_status)+'</td><td>'+date(p.start_date)+'</td><td>'+date(p.end_date)+'</td><td>'+percent(p.actual_progress_percent)+'</td></tr>').join('');
+ $('projectRows').innerHTML=rows||'<tr><td colspan="7" class="empty">لا توجد مشاريع.</td></tr>';
+}
+function renderTasks(){
+ const filter=$('taskFilter').value||'all',q=$('taskSearch').value.trim().toLowerCase();
+ const list=tasks.filter(t=>(filter==='all'||t.project_id===filter)&&(!q||[t.title,t.description,t.responsible_name].join(' ').toLowerCase().includes(q)));
+ const pm=Object.fromEntries(projects.map(p=>[p.id,p.name]));
+ $('taskRows').innerHTML=list.length?list.map(t=>{const ph=phases.find(p=>p.id===t.phase_id);return '<tr><td>'+esc(pm[t.project_id]||'—')+'</td><td>'+esc(ph?.title||'—')+'</td><td><strong>'+esc(t.title)+'</strong><br><small>'+esc(t.description||'')+'</small></td><td>'+esc(t.responsible_name||profiles.find(p=>p.id===t.assigned_to)?.full_name||'—')+'</td><td>'+percent(t.weight_percent)+'</td><td>'+percent(t.progress_percent)+'</td><td><span class="pill '+(t.status==='completed'?'good':t.status==='blocked'?'bad':t.status==='in_progress'?'warn':'')+'">'+(taskStatuses[t.status]||esc(t.status))+'</span></td><td>'+date(t.planned_end_date)+'</td></tr>'}).join(''):'<tr><td colspan="8" class="empty">لا توجد مهام مطابقة.</td></tr>';
+}
+function renderUpdates(){
+ const pm=Object.fromEntries(projects.map(p=>[p.id,p.name]));
+ $('updateRows').innerHTML=updates.length?updates.map(u=>{const t=tasks.find(x=>x.id===u.task_id);const pending=u.status==='pending';return '<tr><td>'+new Date(u.created_at).toLocaleDateString('ar-EG')+'</td><td>'+esc(t?.title||'مهمة محذوفة')+'<br><small>'+esc(pm[u.project_id]||'')+'</small></td><td>'+percent(u.progress_percent)+'</td><td>'+esc(u.notes)+' '+(u.evidence_path?'<br><a target="_blank" rel="noopener" href="'+esc(u.evidence_path)+'">فتح الإثبات</a>':'')+'</td><td><span class="pill '+(u.status==='approved'?'good':u.status==='rejected'?'bad':'warn')+'">'+(updateStatuses[u.status]||u.status)+'</span>'+(u.rejection_reason?'<br><small>'+esc(u.rejection_reason)+'</small>':'')+'</td><td>'+(pending?'<div class="actions"><button class="approve" data-review="approve" data-id="'+u.id+'">اعتماد</button><button class="reject" data-review="reject" data-id="'+u.id+'">رفض</button></div>':'—')+'</td></tr>'}).join(''):'<tr><td colspan="6" class="empty">لا توجد تحديثات إنجاز بعد.</td></tr>';
+}
+function renderActions(){
+ const pm=Object.fromEntries(projects.map(p=>[p.id,p.name]));
+ const open=actions.filter(a=>a.status!=='closed');
+ $('actionRows').innerHTML=open.length?open.map(a=>'<tr><td>'+esc(pm[a.project_id]||'—')+'</td><td>'+types[a.item_type]+'</td><td><strong>'+esc(a.title)+'</strong><br><small>'+esc(a.description||'')+'</small></td><td><span class="pill '+(a.priority==='critical'||a.priority==='high'?'bad':a.priority==='medium'?'warn':'')+'">'+priorities[a.priority]+'</span></td><td>'+actionStatuses[a.status]+'</td><td>'+date(a.due_date)+'</td><td><button class="approve" data-close-action="'+a.id+'">إغلاق</button></td></tr>').join(''):'<tr><td colspan="7" class="empty">لا توجد عقبات أو قرارات مفتوحة.</td></tr>';
+}
+$('tabs').addEventListener('click',e=>{const b=e.target.closest('button[data-tab]');if(!b)return;document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab))});
+$('projectForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;try{const payload={name:$('projectName').value.trim(),project_code:$('projectCode').value.trim()||null,client_name:$('clientName').value.trim()||null,manager_name:$('managerName').value.trim()||null,location:$('projectLocation').value.trim()||null,status:$('projectStatus').value,start_date:$('projectStart').value||null,end_date:$('projectEnd').value||null,is_active:true};const {error}=await sb.from('projects').insert(payload);if(error)throw error;msg('projectFormMsg','تم تسجيل المشروع.',false);$('projectForm').reset();await loadData()}catch(err){msg('projectFormMsg','تعذر حفظ المشروع: '+err.message,true)}finally{b.disabled=false}});
+$('phaseProject').addEventListener('change',()=>phaseOptions($('phaseProject').value));$('taskProject').addEventListener('change',()=>phaseOptions($('taskProject').value));$('updateProject').addEventListener('change',()=>taskOptions($('updateProject').value));
+$('phaseForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;try{const payload={project_id:$('phaseProject').value,title:$('phaseTitle').value.trim(),description:$('phaseDescription').value.trim()||null,phase_order:Number($('phaseOrder').value),weight_percent:Number($('phaseWeight').value),planned_start_date:$('phaseStart').value||null,planned_end_date:$('phaseEnd').value||null};const {error}=await sb.from('project_phases').insert(payload);if(error)throw error;msg('phaseMsg','تم حفظ المرحلة.',false);$('phaseForm').reset();$('phaseOrder').value=phases.filter(p=>p.project_id===payload.project_id).length+1;await loadData()}catch(err){msg('phaseMsg','تعذر حفظ المرحلة: '+err.message,true)}finally{b.disabled=false}});
+$('taskForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;try{const payload={project_id:$('taskProject').value,phase_id:$('taskPhase').value,title:$('taskTitle').value.trim(),description:$('taskDescription').value.trim()||null,responsible_name:$('taskResponsible').value.trim()||null,assigned_to:$('taskAssignee').value||null,task_order:Number($('taskOrder').value),weight_percent:Number($('taskWeight').value),planned_start_date:$('taskStart').value||null,planned_end_date:$('taskEnd').value||null};const {error}=await sb.from('project_tasks').insert(payload);if(error)throw error;msg('taskMsg','تم حفظ المهمة. نسبة الإنجاز تبدأ من صفر ولا تتغير إلا بعد اعتماد تحديث.',false);$('taskForm').reset();$('taskOrder').value=tasks.filter(t=>t.phase_id===payload.phase_id).length+1;await loadData()}catch(err){msg('taskMsg','تعذر حفظ المهمة: '+err.message,true)}finally{b.disabled=false}});
+$('updateForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;try{const payload={project_id:$('updateProject').value,task_id:$('updateTask').value,progress_percent:Number($('updateProgress').value),notes:$('updateNotes').value.trim(),evidence_path:$('updateEvidence').value.trim()||null,status:'pending',submitted_by:currentUser.id};const {error}=await sb.from('project_task_progress_updates').insert(payload);if(error)throw error;msg('updateMsg','تم إرسال تحديث الإنجاز للمراجعة. لن تتغير النسبة قبل الاعتماد.',false);$('updateForm').reset();await loadData()}catch(err){msg('updateMsg','تعذر إرسال التحديث: '+err.message,true)}finally{b.disabled=false}});
+$('updateRows').addEventListener('click',async e=>{const b=e.target.closest('button[data-review]');if(!b)return;const u=updates.find(x=>x.id===b.dataset.id);if(!u||u.status!=='pending')return;let reason=null;if(b.dataset.review==='reject'){reason=prompt('اكتب سبب رفض تحديث الإنجاز:');if(reason===null)return;if(!reason.trim()){alert('سبب الرفض مطلوب.');return}}if(!confirm(b.dataset.review==='approve'?'اعتماد نسبة الإنجاز؟':'رفض تحديث الإنجاز؟'))return;b.disabled=true;try{const payload={status:b.dataset.review==='approve'?'approved':'rejected',reviewed_by:currentUser.id,reviewed_at:new Date().toISOString(),rejection_reason:reason};const {error}=await sb.from('project_task_progress_updates').update(payload).eq('id',u.id).eq('status','pending');if(error)throw error;msg('appMsg',b.dataset.review==='approve'?'تم اعتماد الإنجاز وتحديث المهمة.':'تم رفض التحديث مع تسجيل السبب.',false);await loadData()}catch(err){msg('appMsg','تعذر مراجعة التحديث: '+err.message,true)}finally{b.disabled=false}});
+$('actionForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;try{const payload={project_id:$('actionProject').value,item_type:$('actionType').value,title:$('actionTitle').value.trim(),description:$('actionDescription').value.trim()||null,priority:$('actionPriority').value,due_date:$('actionDue').value||null,assigned_to:$('actionAssignee').value||null,created_by:currentUser.id};const {error}=await sb.from('project_action_items').insert(payload);if(error)throw error;msg('actionMsg','تم تسجيل العقبة / القرار.',false);$('actionForm').reset();await loadData()}catch(err){msg('actionMsg','تعذر حفظ السجل: '+err.message,true)}finally{b.disabled=false}});
+$('actionRows').addEventListener('click',async e=>{const b=e.target.closest('button[data-close-action]');if(!b)return;const id=b.dataset.closeAction;const resolution=prompt('اكتب ملخص الإجراء أو القرار الذي أغلق البند:');if(resolution===null)return;if(!resolution.trim()){alert('ملخص الإغلاق مطلوب.');return}b.disabled=true;try{const {error}=await sb.from('project_action_items').update({status:'closed',resolution:resolution.trim(),closed_at:new Date().toISOString()}).eq('id',id);if(error)throw error;msg('appMsg','تم إغلاق البند وتوثيق القرار.',false);await loadData()}catch(err){msg('appMsg','تعذر إغلاق البند: '+err.message,true)}finally{b.disabled=false}});
+$('taskFilter').addEventListener('change',renderTasks);$('taskSearch').addEventListener('input',renderTasks);
+$('loginBtn').onclick=async()=>{const b=$('loginBtn');b.disabled=true;try{const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)throw error;await verifySession()}catch(e){msg('loginMsg',e.message||'تعذر تسجيل الدخول',true)}finally{b.disabled=false}};
+$('password').addEventListener('keydown',e=>{if(e.key==='Enter')$('loginBtn').click()});$('refreshBtn').onclick=()=>loadData();$('logoutBtn').onclick=async()=>{await sb.auth.signOut();location.reload()};
+verifySession().catch(e=>{msg('loginMsg',e.message||'تعذر التحقق من صلاحيات الحساب',true);sb.auth.signOut()});
+})();
+</script>
+</body></html>
