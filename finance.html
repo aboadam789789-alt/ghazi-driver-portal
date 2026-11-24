@@ -58,7 +58,7 @@ button.secondary,.nav a{background:#294157;color:white}button:disabled{opacity:.
 </div>
 <div class="table-wrap" style="margin-top:16px"><table><thead><tr><th>المشروع</th><th>العميل</th><th>قيمة العقود</th><th>التحصيلات</th><th>المتبقي مقابل التحصيل</th><th>ميزانية التكلفة</th><th>التكلفة المسجلة</th><th>متبقي الميزانية</th></tr></thead><tbody id="financeOverviewRows"><tr><td colspan="8" class="empty">تحميل الملخص...</td></tr></tbody></table></div>
 </section>
-<section class="panel"><h2>تسجيل العقود والتعديلات المعتمدة</h2>
+<section class="panel"><h2>تسجيل العقود والتعديلات</h2>
 <form id="contractForm">
 <input id="contractId" type="hidden">
 <div class="grid">
@@ -83,7 +83,7 @@ button.secondary,.nav a{background:#294157;color:white}button:disabled{opacity:.
 <div><label>المبلغ المحصل (جنيه)</label><input id="receiptAmount" type="number" min="0.01" step="0.01" required></div>
 <div><label>رقم الإيصال / المرجع</label><input id="receiptReference" maxlength="120"></div>
 <div><label>طريقة التحصيل</label><select id="receiptMethod"><option value="bank_transfer">تحويل بنكي</option><option value="cash">نقدي</option><option value="cheque">شيك</option><option value="other">أخرى</option></select></div>
-<div style="grid-column:span 2"><label>ملاحظات</label><input id="receiptNotes" maxlength="500"></div>
+<div style="grid-column:1/-1"><label>ملاحظات</label><input id="receiptNotes" maxlength="500"></div>
 </div><button id="receiptSave" type="submit" style="margin-top:14px">تسجيل التحصيل</button><div id="receiptMsg" class="msg hidden"></div></form>
 <div class="table-wrap" style="margin-top:15px"><table><thead><tr><th>التاريخ</th><th>المشروع</th><th>العقد</th><th>المرجع</th><th>طريقة التحصيل</th><th>المبلغ</th></tr></thead><tbody id="receiptRows"><tr><td colspan="6" class="empty">لا توجد تحصيلات مسجلة.</td></tr></tbody></table></div>
 </section>
@@ -95,7 +95,7 @@ button.secondary,.nav a{background:#294157;color:white}button:disabled{opacity:.
 </div><button id="budgetSave" type="submit" style="margin-top:14px">حفظ الميزانية</button><div id="budgetMsg" class="msg hidden"></div></form>
 <div class="table-wrap" style="margin-top:15px"><table><thead><tr><th>المشروع</th><th>ميزانية التكلفة</th><th>الملاحظات</th><th>آخر تحديث</th></tr></thead><tbody id="budgetRows"><tr><td colspan="4" class="empty">لا توجد ميزانيات مسجلة.</td></tr></tbody></table></div>
 </section>
-<div class="note">ملاحظات منهجية: تكلفة العمالة = الأساسي + المكافآت − الخصومات، ولا تُخصم السلف منها مرة أخرى. لا تُدرج كشوف الرواتب المسودة أو الملغاة. ساعات تشغيل المعدات مؤشر تشغيلي مستقل؛ لا تتحول إلى تكلفة نقدية إلا عند تسجيل سعر تشغيل معتمد. هذا التقرير يعرض التكاليف المسجلة فقط، ولا يحسب الإيرادات أو الربح لعدم وجود بيانات عقد/إيراد مرتبطة في البنية الحالية.</div>
+<div class="note">ملاحظات منهجية: تكلفة العمالة = الأساسي + المكافآت − الخصومات، ولا تُخصم السلف منها مرة أخرى. لا تُدرج كشوف الرواتب المسودة أو الملغاة. ساعات تشغيل المعدات مؤشر تشغيلي مستقل؛ لا تتحول إلى تكلفة نقدية إلا عند تسجيل سعر تشغيل معتمد. تظهر قيمة العقود والتحصيلات الفعلية في لوحة الرقابة المالية أعلاه. المتبقي المعروض هو الفرق بين قيمة العقود السارية/المغلقة والتحصيلات المسجلة، وليس مستخلصاً محاسبياً للذمم. لا يُحتسب الربح حالياً لأن التقرير لا يمثل بعد جميع بنود المصروفات والضرائب والتسويات المحاسبية.</div>
 </section></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
