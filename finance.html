@@ -53,7 +53,7 @@ button.secondary,.nav a{background:#294157;color:white}button:disabled{opacity:.
 <div class="stat"><small>قيمة العقود السارية والمغلقة</small><strong id="portfolioContracts">0.00 ج.م</strong></div>
 <div class="stat"><small>التحصيلات الفعلية</small><strong id="portfolioReceipts">0.00 ج.م</strong></div>
 <div class="stat"><small>المتبقي من قيمة العقود مقابل التحصيل</small><strong id="portfolioBalance">0.00 ج.م</strong></div>
-<div class="stat"><small>ميزانيات التكلفة المعتمدة</small><strong id="portfolioBudgets">0.00 ج.م</strong></div>
+<div class="stat"><small>ميزانيات التكلفة المخططة</small><strong id="portfolioBudgets">0.00 ج.م</strong></div>
 <div class="stat"><small>التكلفة المسجلة</small><strong id="portfolioCosts">0.00 ج.م</strong></div>
 </div>
 <div class="row no-print" style="margin:12px 0"><button type="button" class="secondary" id="portfolioCsvBtn">تصدير ملخص العقود والتحصيلات والميزانيات CSV</button></div>
@@ -91,7 +91,7 @@ button.secondary,.nav a{background:#294157;color:white}button:disabled{opacity:.
 <h2 style="margin-top:20px">ملخص التحصيلات الشهرية</h2>
 <div class="table-wrap"><table><thead><tr><th>الشهر</th><th>نقدي</th><th>تحويل بنكي</th><th>شيك</th><th>أخرى</th><th>الإجمالي</th></tr></thead><tbody id="receiptMonthlyRows"><tr><td colspan="6" class="empty">لا توجد تحصيلات مسجلة.</td></tr></tbody></table></div>
 </section>
-<section class="panel"><h2>ميزانية التكلفة المعتمدة للمشروع</h2>
+<section class="panel"><h2>ميزانية التكلفة المخططة للمشروع</h2>
 <form id="budgetForm" class="no-print"><div class="grid">
 <div><label>المشروع</label><select id="budgetProject" required></select></div>
 <div><label>ميزانية التكلفة (جنيه)</label><input id="budgetAmount" type="number" min="0" step="0.01" required></div>
@@ -172,9 +172,9 @@ function render(){
 }
 function renderFinanceControl(){
  const pm=Object.fromEntries(allProjects.map(p=>[p.id,p.name]));
- const totals=allOverview.reduce((a,x)=>({contracts:a.contracts+Number(x.contract_value||0),receipts:a.receipts+Number(x.received_amount||0),budgets:a.budgets+Number(x.planned_cost_budget||0),costs:a.costs+Number(x.total_cost||0),balance:a.balance+Number(x.contract_collection_balance||0)}),{contracts:0,receipts:0,budgets:0,costs:0,balance:0});
+ const totals=allOverview.reduce((a,x)=>({contracts:a.contracts+Number(x.contract_value||0),receipts:a.receipts+Number(x.received_amount||0),budgets:a.budgets+Number(x.planned_cost_budget||0),balance:a.balance+Number(x.contract_collection_balance||0)}),{contracts:0,receipts:0,budgets:0,balance:0});totals.costs=allCosts.reduce((s,x)=>s+Number(x.amount||0),0);
  $('portfolioContracts').textContent=money(totals.contracts);$('portfolioReceipts').textContent=money(totals.receipts);$('portfolioBalance').textContent=money(totals.balance);$('portfolioBudgets').textContent=money(totals.budgets);$('portfolioCosts').textContent=money(totals.costs);
- $('financeOverviewRows').innerHTML=allOverview.length?allOverview.map(x=>'<tr><td>'+esc(x.project_name)+'</td><td>'+esc(x.client_name||'—')+'</td><td>'+money(x.contract_value)+'</td><td>'+money(x.received_amount)+'</td><td>'+money(x.contract_collection_balance)+'</td><td>'+money(x.planned_cost_budget)+'</td><td>'+money(x.total_cost)+'</td><td>'+money(x.budget_remaining)+'</td></tr>').join(''):'<tr><td colspan="8" class="empty">لا توجد مشروعات.</td></tr>';
+ const overviewHtml=allOverview.map(x=>'<tr><td>'+esc(x.project_name)+'</td><td>'+esc(x.client_name||'—')+'</td><td>'+money(x.contract_value)+'</td><td>'+money(x.received_amount)+'</td><td>'+money(x.contract_collection_balance)+'</td><td>'+money(x.planned_cost_budget)+'</td><td>'+money(x.total_cost)+'</td><td>'+money(x.budget_remaining)+'</td></tr>');const unassignedCost=allCosts.filter(x=>!x.project_id).reduce((s,x)=>s+Number(x.amount||0),0);if(unassignedCost>0)overviewHtml.push('<tr><td>غير موزع</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>'+money(unassignedCost)+'</td><td>—</td></tr>');$('financeOverviewRows').innerHTML=overviewHtml.length?overviewHtml.join(''):'<tr><td colspan="8" class="empty">لا توجد مشروعات أو تكاليف مسجلة.</td></tr>';
  const status={draft:'مسودة',active:'ساري',closed:'مغلق',cancelled:'ملغي'};
  $('contractRows').innerHTML=allContracts.length?allContracts.map(x=>'<tr><td>'+esc(pm[x.project_id]||'—')+'</td><td>'+esc(x.contract_number||'—')+'</td><td>'+(x.contract_type==='variation'?'تعديل':'أساسي')+'</td><td>'+money(x.contract_value)+'</td><td>'+esc(x.contract_date||'—')+'</td><td><span class="pill">'+(status[x.status]||esc(x.status))+'</span></td><td><button class="secondary" type="button" data-edit-contract="'+x.id+'">تعديل</button></td></tr>').join(''):'<tr><td colspan="7" class="empty">لا توجد عقود مسجلة.</td></tr>';
  const method={cash:'نقدي',bank_transfer:'تحويل بنكي',cheque:'شيك',other:'أخرى'};
