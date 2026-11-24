@@ -87,6 +87,9 @@ button.secondary,.nav a{background:#294157;color:white}button:disabled{opacity:.
 <div style="grid-column:1/-1"><label>ملاحظات</label><input id="receiptNotes" maxlength="500"></div>
 </div><button id="receiptSave" type="submit" style="margin-top:14px">تسجيل التحصيل</button><div id="receiptMsg" class="msg hidden"></div></form>
 <div class="table-wrap" style="margin-top:15px"><table><thead><tr><th>التاريخ</th><th>المشروع</th><th>العقد</th><th>المرجع</th><th>طريقة التحصيل</th><th>المبلغ</th></tr></thead><tbody id="receiptRows"><tr><td colspan="6" class="empty">لا توجد تحصيلات مسجلة.</td></tr></tbody></table></div>
+<div class="row no-print" style="margin:12px 0"><button type="button" class="secondary" id="receiptCsvBtn">تصدير سجل التحصيلات CSV</button></div>
+<h2 style="margin-top:20px">ملخص التحصيلات الشهرية</h2>
+<div class="table-wrap"><table><thead><tr><th>الشهر</th><th>نقدي</th><th>تحويل بنكي</th><th>شيك</th><th>أخرى</th><th>الإجمالي</th></tr></thead><tbody id="receiptMonthlyRows"><tr><td colspan="6" class="empty">لا توجد تحصيلات مسجلة.</td></tr></tbody></table></div>
 </section>
 <section class="panel"><h2>ميزانية التكلفة المعتمدة للمشروع</h2>
 <form id="budgetForm" class="no-print"><div class="grid">
@@ -176,6 +179,9 @@ function renderFinanceControl(){
  $('contractRows').innerHTML=allContracts.length?allContracts.map(x=>'<tr><td>'+esc(pm[x.project_id]||'—')+'</td><td>'+esc(x.contract_number||'—')+'</td><td>'+(x.contract_type==='variation'?'تعديل':'أساسي')+'</td><td>'+money(x.contract_value)+'</td><td>'+esc(x.contract_date||'—')+'</td><td><span class="pill">'+(status[x.status]||esc(x.status))+'</span></td><td><button class="secondary" type="button" data-edit-contract="'+x.id+'">تعديل</button></td></tr>').join(''):'<tr><td colspan="7" class="empty">لا توجد عقود مسجلة.</td></tr>';
  const method={cash:'نقدي',bank_transfer:'تحويل بنكي',cheque:'شيك',other:'أخرى'};
  $('receiptRows').innerHTML=allReceipts.length?allReceipts.map(x=>{const c=allContracts.find(y=>y.id===x.contract_id);return '<tr><td>'+esc(x.receipt_date)+'</td><td>'+esc(pm[x.project_id]||'—')+'</td><td>'+esc(c?.contract_number||'على مستوى المشروع')+'</td><td>'+esc(x.receipt_reference||'—')+'</td><td>'+method[x.payment_method]+'</td><td><strong>'+money(x.amount)+'</strong></td></tr>'}).join(''):'<tr><td colspan="6" class="empty">لا توجد تحصيلات مسجلة.</td></tr>';
+  const monthlyReceipts={};allReceipts.forEach(x=>{const month=String(x.receipt_date||'').slice(0,7)||'غير محدد';if(!monthlyReceipts[month])monthlyReceipts[month]={cash:0,bank_transfer:0,cheque:0,other:0};monthlyReceipts[month][x.payment_method]=(monthlyReceipts[month][x.payment_method]||0)+Number(x.amount||0)});
+ const receiptMonths=Object.entries(monthlyReceipts).sort((a,b)=>b[0].localeCompare(a[0]));
+ $('receiptMonthlyRows').innerHTML=receiptMonths.length?receiptMonths.map(([month,v])=>'<tr><td>'+esc(month)+'</td><td>'+money(v.cash)+'</td><td>'+money(v.bank_transfer)+'</td><td>'+money(v.cheque)+'</td><td>'+money(v.other)+'</td><td><strong>'+money(v.cash+v.bank_transfer+v.cheque+v.other)+'</strong></td></tr>').join(''):'<tr><td colspan="6" class="empty">لا توجد تحصيلات مسجلة.</td></tr>';
  $('budgetRows').innerHTML=allBudgets.length?allBudgets.map(x=>'<tr><td>'+esc(pm[x.project_id]||'—')+'</td><td>'+money(x.planned_cost_budget)+'</td><td>'+esc(x.notes||'—')+'</td><td>'+esc(x.updated_at?new Date(x.updated_at).toLocaleDateString('ar-EG'):'—')+'</td></tr>').join(''):'<tr><td colspan="4" class="empty">لا توجد ميزانيات مسجلة.</td></tr>';
  refreshReceiptContracts();
 }
@@ -228,6 +234,15 @@ $('budgetForm').addEventListener('submit',async e=>{
   msg('budgetMsg','تم حفظ ميزانية المشروع.',false);await reloadFinance();
  }catch(err){msg('budgetMsg','تعذر حفظ الميزانية: '+err.message,true)}finally{b.disabled=false}
 });
+function receiptCsv(){
+ const pm=Object.fromEntries(allProjects.map(p=>[p.id,p.name]));
+ const head=['تاريخ التحصيل','المشروع','العقد','المرجع','طريقة التحصيل','المبلغ بالجنيه','ملاحظات'];
+ const methods={cash:'نقدي',bank_transfer:'تحويل بنكي',cheque:'شيك',other:'أخرى'};
+ const rows=allReceipts.map(x=>{const contract=allContracts.find(c=>c.id===x.contract_id);return [x.receipt_date,pm[x.project_id]||'',contract?.contract_number||'على مستوى المشروع',x.receipt_reference||'',methods[x.payment_method]||x.payment_method,x.amount,x.notes||'']});
+ const quote=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+ const csvText='\\ufeff'+[head,...rows].map(r=>r.map(quote).join(',')).join('\\r\\n');
+ const blob=new Blob([csvText],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='el-ghazy-project-receipts.csv';a.click();URL.revokeObjectURL(url);
+}
 function portfolioCsv(){
  const rows=[['المشروع','العميل','قيمة العقود السارية والمغلقة','التحصيلات الفعلية','المتبقي مقابل التحصيل','ميزانية التكلفة','التكلفة المسجلة','متبقي الميزانية']];
  allOverview.forEach(x=>rows.push([x.project_name,x.client_name||'',x.contract_value,x.received_amount,x.contract_collection_balance,x.planned_cost_budget,x.total_cost,x.budget_remaining]));
@@ -246,7 +261,7 @@ function csv(){
 }
 $('loginBtn').onclick=async()=>{const b=$('loginBtn');b.disabled=true;try{const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)throw error;await verifySession()}catch(e){msg('loginMsg',e.message||'تعذر تسجيل الدخول',true)}finally{b.disabled=false}};
 $('password').addEventListener('keydown',e=>{if(e.key==='Enter')$('loginBtn').click()});
-$('portfolioCsvBtn').onclick=portfolioCsv;
+$('portfolioCsvBtn').onclick=portfolioCsv;$('receiptCsvBtn').onclick=receiptCsv;
 $('applyBtn').onclick=render;$('refreshBtn').onclick=loadData;$('csvBtn').onclick=csv;$('printBtn').onclick=()=>window.print();
 $('logoutBtn').onclick=async()=>{await sb.auth.signOut();location.reload()};
 verifySession().catch(e=>{msg('loginMsg',e.message||'تعذر التحقق من الصلاحيات',true);sb.auth.signOut()});
