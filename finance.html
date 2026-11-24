@@ -240,7 +240,7 @@ function receiptCsv(){
  const methods={cash:'نقدي',bank_transfer:'تحويل بنكي',cheque:'شيك',other:'أخرى'};
  const rows=allReceipts.map(x=>{const contract=allContracts.find(c=>c.id===x.contract_id);return [x.receipt_date,pm[x.project_id]||'',contract?.contract_number||'على مستوى المشروع',x.receipt_reference||'',methods[x.payment_method]||x.payment_method,x.amount,x.notes||'']});
  const quote=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
- const csvText='\\ufeff'+[head,...rows].map(r=>r.map(quote).join(',')).join('\\r\\n');
+ const csvText='\ufeff'+[head,...rows].map(r=>r.map(quote).join(',')).join('\r\n');
  const blob=new Blob([csvText],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='el-ghazy-project-receipts.csv';a.click();URL.revokeObjectURL(url);
 }
 function portfolioCsv(){
