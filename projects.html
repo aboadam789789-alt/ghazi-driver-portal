@@ -145,7 +145,7 @@ const types={issue:'عقبة',decision:'قرار'};
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function msg(id,text,bad=false){$(id).textContent=text;$(id).classList.remove('hidden');$(id).classList.toggle('error',bad);$(id).classList.toggle('success',!bad)}
 function date(v){return v?new Date(v+'T00:00:00').toLocaleDateString('ar-EG'):'—'}
-function percent(v){return Number(v||0).toLocaleString('ar-EG',{maximumFractionDigits:1})+'%'}
+function percent(v){return v===null||v===undefined?'غير مقاس':Number(v).toLocaleString('ar-EG',{maximumFractionDigits:1})+'%'}
 function selectOptions(id,items,label,empty='اختر المشروع'){const current=$(id).value;$(id).innerHTML='<option value="">'+empty+'</option>'+items.map(x=>'<option value="'+esc(x.id)+'">'+esc(label(x))+'</option>').join('');if(items.some(x=>x.id===current))$(id).value=current}
 function setProjectOptions(){const f=p=>p.name+(p.project_code?' · '+p.project_code:'');['phaseProject','taskProject','updateProject','actionProject'].forEach(id=>selectOptions(id,projects,f));$('taskFilter').innerHTML='<option value="all">كل المشاريع</option>'+projects.map(p=>'<option value="'+esc(p.id)+'">'+esc(f(p))+'</option>').join('');}
 function setPeopleOptions(){const html='<option value="">غير محدد</option>'+profiles.map(p=>'<option value="'+esc(p.id)+'">'+esc(p.full_name||'مستخدم')+'</option>').join('');$('taskAssignee').innerHTML=html;$('actionAssignee').innerHTML=html}
@@ -182,7 +182,7 @@ async function loadData(){
 function renderAll(){renderStats();renderProjects();renderTasks();renderUpdates();renderActions()}
 function renderStats(){
  $('activeCount').textContent=dashboard.length.toLocaleString('ar-EG');
- const measurable=dashboard.filter(p=>Number(p.phase_count)>0);
+ const measurable=dashboard.filter(p=>p.actual_progress_percent!==null&&p.actual_progress_percent!==undefined);
  $('avgProgress').textContent=measurable.length?percent(measurable.reduce((s,p)=>s+Number(p.actual_progress_percent||0),0)/measurable.length):'—';
  $('overdueTasks').textContent=dashboard.reduce((s,p)=>s+Number(p.overdue_task_count||0),0).toLocaleString('ar-EG');
  $('blockedTasks').textContent=dashboard.reduce((s,p)=>s+Number(p.blocked_task_count||0),0).toLocaleString('ar-EG');
