@@ -47,6 +47,54 @@ button.secondary,.nav a{background:#294157;color:white}button:disabled{opacity:.
 <div class="panel"><h2>ملخص التكلفة حسب المشروع</h2><div id="projectBars" class="bars"><div class="empty">تحميل التقرير...</div></div></div>
 <div class="panel"><h2>التكلفة الشهرية</h2><div class="table-wrap"><table><thead><tr><th>الشهر</th><th>العمالة</th><th>المعدات</th><th>التوريدات</th><th>الإجمالي</th></tr></thead><tbody id="monthlyRows"><tr><td colspan="5" class="empty">تحميل...</td></tr></tbody></table></div></div>
 <div class="panel"><h2>تفاصيل بنود التكلفة</h2><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>المشروع</th><th>البند</th><th>البيان</th><th>الكمية</th><th>القيمة</th></tr></thead><tbody id="detailRows"><tr><td colspan="6" class="empty">تحميل...</td></tr></tbody></table></div></div>
+
+<section class="panel"><h2>لوحة الرقابة المالية والعقود</h2><small>القيم التالية إجمالية على مستوى المشروعات، ولا تتأثر بفلاتر تاريخ بنود التكلفة أعلاه.</small>
+<div class="stats" style="margin-top:14px">
+<div class="stat"><small>قيمة العقود السارية والمغلقة</small><strong id="portfolioContracts">0.00 ج.م</strong></div>
+<div class="stat"><small>التحصيلات الفعلية</small><strong id="portfolioReceipts">0.00 ج.م</strong></div>
+<div class="stat"><small>المتبقي من قيمة العقود مقابل التحصيل</small><strong id="portfolioBalance">0.00 ج.م</strong></div>
+<div class="stat"><small>ميزانيات التكلفة المعتمدة</small><strong id="portfolioBudgets">0.00 ج.م</strong></div>
+<div class="stat"><small>التكلفة المسجلة</small><strong id="portfolioCosts">0.00 ج.م</strong></div>
+</div>
+<div class="table-wrap" style="margin-top:16px"><table><thead><tr><th>المشروع</th><th>العميل</th><th>قيمة العقود</th><th>التحصيلات</th><th>المتبقي مقابل التحصيل</th><th>ميزانية التكلفة</th><th>التكلفة المسجلة</th><th>متبقي الميزانية</th></tr></thead><tbody id="financeOverviewRows"><tr><td colspan="8" class="empty">تحميل الملخص...</td></tr></tbody></table></div>
+</section>
+<section class="panel"><h2>تسجيل العقود والتعديلات المعتمدة</h2>
+<form id="contractForm">
+<input id="contractId" type="hidden">
+<div class="grid">
+<div><label>المشروع</label><select id="contractProject" required></select></div>
+<div><label>رقم العقد / أمر الإسناد</label><input id="contractNumber" maxlength="100" placeholder="اختياري"></div>
+<div><label>نوع المستند</label><select id="contractType"><option value="main">عقد أساسي</option><option value="variation">تعديل / أمر تغييري</option></select></div>
+<div><label>قيمة العقد أو التعديل (جنيه)</label><input id="contractValue" type="number" step="0.01" required></div>
+<div><label>العميل</label><input id="contractClient" maxlength="180" placeholder="اسم الجهة المالكة"></div>
+<div><label>تاريخ العقد</label><input id="contractDate" type="date"></div>
+<div><label>الحالة</label><select id="contractStatus"><option value="draft">مسودة</option><option value="active">ساري</option><option value="closed">مغلق</option><option value="cancelled">ملغي</option></select></div>
+<div><label>ملاحظات</label><input id="contractNotes" maxlength="500"></div>
+</div><div class="row" style="margin-top:14px"><button id="contractSave" type="submit">حفظ العقد</button><button class="secondary" id="contractReset" type="button">تفريغ الحقول</button></div>
+<div id="contractMsg" class="msg hidden"></div>
+</form>
+<div class="table-wrap" style="margin-top:15px"><table><thead><tr><th>المشروع</th><th>رقم العقد</th><th>النوع</th><th>القيمة</th><th>التاريخ</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="contractRows"><tr><td colspan="7" class="empty">لا توجد عقود مسجلة.</td></tr></tbody></table></div>
+</section>
+<section class="panel"><h2>تسجيل التحصيلات الفعلية</h2>
+<form id="receiptForm"><div class="grid">
+<div><label>المشروع</label><select id="receiptProject" required></select></div>
+<div><label>العقد المرتبط (اختياري)</label><select id="receiptContract"><option value="">تحصيل على مستوى المشروع</option></select></div>
+<div><label>تاريخ التحصيل</label><input id="receiptDate" type="date" required></div>
+<div><label>المبلغ المحصل (جنيه)</label><input id="receiptAmount" type="number" min="0.01" step="0.01" required></div>
+<div><label>رقم الإيصال / المرجع</label><input id="receiptReference" maxlength="120"></div>
+<div><label>طريقة التحصيل</label><select id="receiptMethod"><option value="bank_transfer">تحويل بنكي</option><option value="cash">نقدي</option><option value="cheque">شيك</option><option value="other">أخرى</option></select></div>
+<div style="grid-column:span 2"><label>ملاحظات</label><input id="receiptNotes" maxlength="500"></div>
+</div><button id="receiptSave" type="submit" style="margin-top:14px">تسجيل التحصيل</button><div id="receiptMsg" class="msg hidden"></div></form>
+<div class="table-wrap" style="margin-top:15px"><table><thead><tr><th>التاريخ</th><th>المشروع</th><th>العقد</th><th>المرجع</th><th>طريقة التحصيل</th><th>المبلغ</th></tr></thead><tbody id="receiptRows"><tr><td colspan="6" class="empty">لا توجد تحصيلات مسجلة.</td></tr></tbody></table></div>
+</section>
+<section class="panel"><h2>ميزانية التكلفة المعتمدة للمشروع</h2>
+<form id="budgetForm"><div class="grid">
+<div><label>المشروع</label><select id="budgetProject" required></select></div>
+<div><label>ميزانية التكلفة (جنيه)</label><input id="budgetAmount" type="number" min="0" step="0.01" required></div>
+<div style="grid-column:span 2"><label>ملاحظات / مرجع الاعتماد</label><input id="budgetNotes" maxlength="500"></div>
+</div><button id="budgetSave" type="submit" style="margin-top:14px">حفظ الميزانية</button><div id="budgetMsg" class="msg hidden"></div></form>
+<div class="table-wrap" style="margin-top:15px"><table><thead><tr><th>المشروع</th><th>ميزانية التكلفة</th><th>الملاحظات</th><th>آخر تحديث</th></tr></thead><tbody id="budgetRows"><tr><td colspan="4" class="empty">لا توجد ميزانيات مسجلة.</td></tr></tbody></table></div>
+</section>
 <div class="note">ملاحظات منهجية: تكلفة العمالة = الأساسي + المكافآت − الخصومات، ولا تُخصم السلف منها مرة أخرى. لا تُدرج كشوف الرواتب المسودة أو الملغاة. ساعات تشغيل المعدات مؤشر تشغيلي مستقل؛ لا تتحول إلى تكلفة نقدية إلا عند تسجيل سعر تشغيل معتمد. هذا التقرير يعرض التكاليف المسجلة فقط، ولا يحسب الإيرادات أو الربح لعدم وجود بيانات عقد/إيراد مرتبطة في البنية الحالية.</div>
 </section></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -56,7 +104,7 @@ const SUPABASE_URL='https://csogzlzqinczlxdotfmb.supabase.co';
 const SUPABASE_KEY='sb_publishable_0xEG3oh5o_bPX3C42dBwcQ_Uk3-4SEt';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
-let allCosts=[],allProjects=[],allHours=[],currentUser=null;
+let allCosts=[],allProjects=[],allHours=[],allContracts=[],allReceipts=[],allBudgets=[],allOverview=[],currentUser=null;
 const labels={labor:'العمالة',equipment:'مصروفات المعدات',supply:'التوريدات والمواد'};
 const money=n=>Number(n||0).toLocaleString('ar-EG',{minimumFractionDigits:2,maximumFractionDigits:2})+' ج.م';
 const num=n=>Number(n||0).toLocaleString('ar-EG',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -77,15 +125,24 @@ async function verifySession(){
 async function loadData(){
  $('refreshBtn').disabled=true;
  try{
-  const [costs,projects,ops]=await Promise.all([
+  const [costs,projects,ops,contracts,receipts,budgets,overview]=await Promise.all([
    sb.from('project_financial_costs').select('source_type,source_label,source_id,project_id,cost_date,amount,quantity,unit,description').order('cost_date',{ascending:false}).limit(10000),
-   sb.from('projects').select('id,name,project_code').order('name'),
-   sb.from('operation_logs').select('project_id,operation_date,operating_hours').eq('status','approved').limit(10000)
+   sb.from('projects').select('id,name,project_code,client_name').order('name'),
+   sb.from('operation_logs').select('project_id,operation_date,operating_hours').eq('status','approved').limit(10000),
+   sb.from('project_contracts').select('id,project_id,contract_number,contract_type,contract_value,contract_date,status,client_name,notes').order('contract_date',{ascending:false}),
+   sb.from('project_receipts').select('id,project_id,contract_id,receipt_date,amount,receipt_reference,payment_method,notes').order('receipt_date',{ascending:false}),
+   sb.from('project_cost_budgets').select('project_id,planned_cost_budget,notes,updated_at'),
+   sb.from('project_financial_summary').select('project_id,project_name,project_code,client_name,project_status,contract_value,received_amount,contract_collection_balance,planned_cost_budget,total_cost,budget_remaining,active_contract_count').order('project_name')
   ]);
-  for(const r of [costs,projects,ops])if(r.error)throw r.error;
+  for(const r of [costs,projects,ops,contracts,receipts,budgets,overview])if(r.error)throw r.error;
   allCosts=costs.data||[];allProjects=projects.data||[];allHours=ops.data||[];
-  $('projectFilter').innerHTML='<option value="all">كل المشروعات</option><option value="unassigned">غير موزع</option>'+allProjects.map(p=>'<option value="'+p.id+'">'+esc(p.name)+'</option>').join('');
-  render();
+  allContracts=contracts.data||[];allReceipts=receipts.data||[];allBudgets=budgets.data||[];allOverview=overview.data||[];
+  const projectOptions=allProjects.map(p=>'<option value="'+p.id+'">'+esc(p.name)+'</option>').join('');
+  $('projectFilter').innerHTML='<option value="all">كل المشروعات</option><option value="unassigned">غير موزع</option>'+projectOptions;
+  ['contractProject','receiptProject','budgetProject'].forEach(id=>$(id).innerHTML=projectOptions);
+  $('contractProject').value=allProjects[0]?.id||'';$('receiptProject').value=allProjects[0]?.id||'';$('budgetProject').value=allProjects[0]?.id||'';
+  $('receiptDate').value=isoToday();$('contractDate').value=isoToday();
+  render();renderFinanceControl();
  }catch(e){msg('dataMsg','تعذر تحميل التقرير: '+e.message,true)}
  finally{$('refreshBtn').disabled=false}
 }
@@ -109,6 +166,67 @@ function render(){
  $('monthlyRows').innerHTML=months.length?months.map(([m,v])=>'<tr><td>'+esc(m)+'</td><td>'+money(v.labor)+'</td><td>'+money(v.equipment)+'</td><td>'+money(v.supply)+'</td><td><strong>'+money(v.labor+v.equipment+v.supply)+'</strong></td></tr>').join(''):'<tr><td colspan="5" class="empty">لا توجد بيانات شهرية للفترة المحددة.</td></tr>';
  $('detailRows').innerHTML=rows.length?rows.map(x=>'<tr><td>'+esc(x.cost_date)+'</td><td>'+esc(x.project_id?(pm[x.project_id]||'مشروع غير معروف'):'غير موزع')+'</td><td><span class="pill">'+esc(labels[x.source_type]||x.source_label)+'</span></td><td>'+esc(x.description||x.source_label||'—')+'</td><td>'+((x.quantity!==null&&x.quantity!==undefined)?num(x.quantity)+' '+esc(x.unit||''):'—')+'</td><td><strong>'+money(x.amount)+'</strong></td></tr>').join(''):'<tr><td colspan="6" class="empty">لا توجد بنود تكلفة مسجلة. ستظهر البيانات بعد إدخال بيانات التشغيل الفعلية.</td></tr>';
 }
+function renderFinanceControl(){
+ const pm=Object.fromEntries(allProjects.map(p=>[p.id,p.name]));
+ const totals=allOverview.reduce((a,x)=>({contracts:a.contracts+Number(x.contract_value||0),receipts:a.receipts+Number(x.received_amount||0),budgets:a.budgets+Number(x.planned_cost_budget||0),costs:a.costs+Number(x.total_cost||0),balance:a.balance+Number(x.contract_collection_balance||0)}),{contracts:0,receipts:0,budgets:0,costs:0,balance:0});
+ $('portfolioContracts').textContent=money(totals.contracts);$('portfolioReceipts').textContent=money(totals.receipts);$('portfolioBalance').textContent=money(totals.balance);$('portfolioBudgets').textContent=money(totals.budgets);$('portfolioCosts').textContent=money(totals.costs);
+ $('financeOverviewRows').innerHTML=allOverview.length?allOverview.map(x=>'<tr><td>'+esc(x.project_name)+'</td><td>'+esc(x.client_name||'—')+'</td><td>'+money(x.contract_value)+'</td><td>'+money(x.received_amount)+'</td><td>'+money(x.contract_collection_balance)+'</td><td>'+money(x.planned_cost_budget)+'</td><td>'+money(x.total_cost)+'</td><td>'+money(x.budget_remaining)+'</td></tr>').join(''):'<tr><td colspan="8" class="empty">لا توجد مشروعات.</td></tr>';
+ const status={draft:'مسودة',active:'ساري',closed:'مغلق',cancelled:'ملغي'};
+ $('contractRows').innerHTML=allContracts.length?allContracts.map(x=>'<tr><td>'+esc(pm[x.project_id]||'—')+'</td><td>'+esc(x.contract_number||'—')+'</td><td>'+(x.contract_type==='variation'?'تعديل':'أساسي')+'</td><td>'+money(x.contract_value)+'</td><td>'+esc(x.contract_date||'—')+'</td><td><span class="pill">'+(status[x.status]||esc(x.status))+'</span></td><td><button class="secondary" type="button" data-edit-contract="'+x.id+'">تعديل</button></td></tr>').join(''):'<tr><td colspan="7" class="empty">لا توجد عقود مسجلة.</td></tr>';
+ const method={cash:'نقدي',bank_transfer:'تحويل بنكي',cheque:'شيك',other:'أخرى'};
+ $('receiptRows').innerHTML=allReceipts.length?allReceipts.map(x=>{const c=allContracts.find(y=>y.id===x.contract_id);return '<tr><td>'+esc(x.receipt_date)+'</td><td>'+esc(pm[x.project_id]||'—')+'</td><td>'+esc(c?.contract_number||'على مستوى المشروع')+'</td><td>'+esc(x.receipt_reference||'—')+'</td><td>'+method[x.payment_method]+'</td><td><strong>'+money(x.amount)+'</strong></td></tr>'}).join(''):'<tr><td colspan="6" class="empty">لا توجد تحصيلات مسجلة.</td></tr>';
+ $('budgetRows').innerHTML=allBudgets.length?allBudgets.map(x=>'<tr><td>'+esc(pm[x.project_id]||'—')+'</td><td>'+money(x.planned_cost_budget)+'</td><td>'+esc(x.notes||'—')+'</td><td>'+esc(x.updated_at?new Date(x.updated_at).toLocaleDateString('ar-EG'):'—')+'</td></tr>').join(''):'<tr><td colspan="4" class="empty">لا توجد ميزانيات مسجلة.</td></tr>';
+ refreshReceiptContracts();
+}
+function refreshReceiptContracts(){
+ const pid=$('receiptProject').value,prior=$('receiptContract').value;
+ const relevant=allContracts.filter(x=>x.project_id===pid&&x.status!=='cancelled');
+ $('receiptContract').innerHTML='<option value="">تحصيل على مستوى المشروع</option>'+relevant.map(x=>'<option value="'+x.id+'">'+esc(x.contract_number||'عقد بدون رقم')+' — '+money(x.contract_value)+'</option>').join('');
+ if(relevant.some(x=>x.id===prior))$('receiptContract').value=prior;
+}
+function resetContractForm(){
+ $('contractForm').reset();$('contractId').value='';$('contractDate').value=isoToday();$('contractProject').value=allProjects[0]?.id||'';$('contractStatus').value='draft';$('contractType').value='main';$('contractSave').textContent='حفظ العقد';
+}
+async function reloadFinance(){
+ await loadData();
+}
+$('contractForm').addEventListener('submit',async e=>{
+ e.preventDefault();const b=$('contractSave');b.disabled=true;
+ try{
+  const id=$('contractId').value||null,type=$('contractType').value,value=Number($('contractValue').value);
+  if(!Number.isFinite(value)||(type==='main'&&value<=0)||(type==='variation'&&value===0))throw Error('تحقق من قيمة العقد أو التعديل.');
+  const payload={project_id:$('contractProject').value,contract_number:$('contractNumber').value.trim()||null,contract_type:type,contract_value:value,client_name:$('contractClient').value.trim()||null,contract_date:$('contractDate').value||null,status:$('contractStatus').value,notes:$('contractNotes').value.trim()||null,updated_at:new Date().toISOString()};
+  const result=id?await sb.from('project_contracts').update(payload).eq('id',id):await sb.from('project_contracts').insert(payload);
+  if(result.error)throw result.error;
+  msg('contractMsg',id?'تم تحديث العقد.':'تم تسجيل العقد.',false);resetContractForm();await reloadFinance();
+ }catch(err){msg('contractMsg','تعذر حفظ العقد: '+err.message,true)}finally{b.disabled=false}
+});
+$('contractRows').addEventListener('click',e=>{
+ const b=e.target.closest('[data-edit-contract]');if(!b)return;const x=allContracts.find(c=>c.id===b.dataset.editContract);if(!x)return;
+ $('contractId').value=x.id;$('contractProject').value=x.project_id;$('contractNumber').value=x.contract_number||'';$('contractType').value=x.contract_type;$('contractValue').value=x.contract_value;$('contractClient').value=x.client_name||'';$('contractDate').value=x.contract_date||'';$('contractStatus').value=x.status;$('contractNotes').value=x.notes||'';$('contractSave').textContent='حفظ التعديلات';$('contractForm').scrollIntoView({behavior:'smooth',block:'center'});
+});
+$('contractReset').onclick=resetContractForm;
+$('receiptProject').addEventListener('change',refreshReceiptContracts);
+$('receiptForm').addEventListener('submit',async e=>{
+ e.preventDefault();const b=$('receiptSave');b.disabled=true;
+ try{
+  const amount=Number($('receiptAmount').value);if(!Number.isFinite(amount)||amount<=0)throw Error('يجب إدخال مبلغ تحصيل أكبر من صفر.');
+  const contractId=$('receiptContract').value||null;
+  if(contractId&&!allContracts.some(x=>x.id===contractId&&x.project_id===$('receiptProject').value))throw Error('العقد المحدد لا يتبع المشروع المختار.');
+  const {error}=await sb.from('project_receipts').insert({project_id:$('receiptProject').value,contract_id:contractId,receipt_date:$('receiptDate').value,amount,receipt_reference:$('receiptReference').value.trim()||null,payment_method:$('receiptMethod').value,notes:$('receiptNotes').value.trim()||null});
+  if(error)throw error;
+  msg('receiptMsg','تم تسجيل التحصيل الفعلي.',false);$('receiptForm').reset();$('receiptDate').value=isoToday();$('receiptProject').value=allProjects[0]?.id||'';refreshReceiptContracts();await reloadFinance();
+ }catch(err){msg('receiptMsg','تعذر تسجيل التحصيل: '+err.message,true)}finally{b.disabled=false}
+});
+$('budgetForm').addEventListener('submit',async e=>{
+ e.preventDefault();const b=$('budgetSave');b.disabled=true;
+ try{
+  const amount=Number($('budgetAmount').value);if(!Number.isFinite(amount)||amount<0)throw Error('ميزانية التكلفة يجب ألا تقل عن صفر.');
+  const {error}=await sb.from('project_cost_budgets').upsert({project_id:$('budgetProject').value,planned_cost_budget:amount,notes:$('budgetNotes').value.trim()||null,updated_by:currentUser.id,updated_at:new Date().toISOString()},{onConflict:'project_id'});
+  if(error)throw error;
+  msg('budgetMsg','تم حفظ ميزانية المشروع.',false);await reloadFinance();
+ }catch(err){msg('budgetMsg','تعذر حفظ الميزانية: '+err.message,true)}finally{b.disabled=false}
+});
 function csv(){
  const rows=filtered(),pm=Object.fromEntries(allProjects.map(p=>[p.id,p.name]));
  const head=['التاريخ','المشروع','نوع التكلفة','البيان','الكمية','الوحدة','القيمة بالجنيه'];
