@@ -56,10 +56,11 @@ button.secondary,.nav a{background:#294157;color:white}button:disabled{opacity:.
 <div class="stat"><small>ميزانيات التكلفة المعتمدة</small><strong id="portfolioBudgets">0.00 ج.م</strong></div>
 <div class="stat"><small>التكلفة المسجلة</small><strong id="portfolioCosts">0.00 ج.م</strong></div>
 </div>
+<div class="row no-print" style="margin:12px 0"><button type="button" class="secondary" id="portfolioCsvBtn">تصدير ملخص العقود والتحصيلات والميزانيات CSV</button></div>
 <div class="table-wrap" style="margin-top:16px"><table><thead><tr><th>المشروع</th><th>العميل</th><th>قيمة العقود</th><th>التحصيلات</th><th>المتبقي مقابل التحصيل</th><th>ميزانية التكلفة</th><th>التكلفة المسجلة</th><th>متبقي الميزانية</th></tr></thead><tbody id="financeOverviewRows"><tr><td colspan="8" class="empty">تحميل الملخص...</td></tr></tbody></table></div>
 </section>
 <section class="panel"><h2>تسجيل العقود والتعديلات</h2>
-<form id="contractForm">
+<form id="contractForm" class="no-print">
 <input id="contractId" type="hidden">
 <div class="grid">
 <div><label>المشروع</label><select id="contractProject" required></select></div>
@@ -76,7 +77,7 @@ button.secondary,.nav a{background:#294157;color:white}button:disabled{opacity:.
 <div class="table-wrap" style="margin-top:15px"><table><thead><tr><th>المشروع</th><th>رقم العقد</th><th>النوع</th><th>القيمة</th><th>التاريخ</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="contractRows"><tr><td colspan="7" class="empty">لا توجد عقود مسجلة.</td></tr></tbody></table></div>
 </section>
 <section class="panel"><h2>تسجيل التحصيلات الفعلية</h2>
-<form id="receiptForm"><div class="grid">
+<form id="receiptForm" class="no-print"><div class="grid">
 <div><label>المشروع</label><select id="receiptProject" required></select></div>
 <div><label>العقد المرتبط (اختياري)</label><select id="receiptContract"><option value="">تحصيل على مستوى المشروع</option></select></div>
 <div><label>تاريخ التحصيل</label><input id="receiptDate" type="date" required></div>
@@ -88,7 +89,7 @@ button.secondary,.nav a{background:#294157;color:white}button:disabled{opacity:.
 <div class="table-wrap" style="margin-top:15px"><table><thead><tr><th>التاريخ</th><th>المشروع</th><th>العقد</th><th>المرجع</th><th>طريقة التحصيل</th><th>المبلغ</th></tr></thead><tbody id="receiptRows"><tr><td colspan="6" class="empty">لا توجد تحصيلات مسجلة.</td></tr></tbody></table></div>
 </section>
 <section class="panel"><h2>ميزانية التكلفة المعتمدة للمشروع</h2>
-<form id="budgetForm"><div class="grid">
+<form id="budgetForm" class="no-print"><div class="grid">
 <div><label>المشروع</label><select id="budgetProject" required></select></div>
 <div><label>ميزانية التكلفة (جنيه)</label><input id="budgetAmount" type="number" min="0" step="0.01" required></div>
 <div style="grid-column:span 2"><label>ملاحظات / مرجع الاعتماد</label><input id="budgetNotes" maxlength="500"></div>
@@ -227,6 +228,13 @@ $('budgetForm').addEventListener('submit',async e=>{
   msg('budgetMsg','تم حفظ ميزانية المشروع.',false);await reloadFinance();
  }catch(err){msg('budgetMsg','تعذر حفظ الميزانية: '+err.message,true)}finally{b.disabled=false}
 });
+function portfolioCsv(){
+ const rows=[['المشروع','العميل','قيمة العقود السارية والمغلقة','التحصيلات الفعلية','المتبقي مقابل التحصيل','ميزانية التكلفة','التكلفة المسجلة','متبقي الميزانية']];
+ allOverview.forEach(x=>rows.push([x.project_name,x.client_name||'',x.contract_value,x.received_amount,x.contract_collection_balance,x.planned_cost_budget,x.total_cost,x.budget_remaining]));
+ const quote=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+ const blob=new Blob(['\\ufeff'+rows.map(r=>r.map(quote).join(',')).join('\\r\\n')],{type:'text/csv;charset=utf-8;'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='el-ghazy-project-financial-overview.csv';a.click();URL.revokeObjectURL(url);
+}
 function csv(){
  const rows=filtered(),pm=Object.fromEntries(allProjects.map(p=>[p.id,p.name]));
  const head=['التاريخ','المشروع','نوع التكلفة','البيان','الكمية','الوحدة','القيمة بالجنيه'];
@@ -238,6 +246,7 @@ function csv(){
 }
 $('loginBtn').onclick=async()=>{const b=$('loginBtn');b.disabled=true;try{const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)throw error;await verifySession()}catch(e){msg('loginMsg',e.message||'تعذر تسجيل الدخول',true)}finally{b.disabled=false}};
 $('password').addEventListener('keydown',e=>{if(e.key==='Enter')$('loginBtn').click()});
+$('portfolioCsvBtn').onclick=portfolioCsv;
 $('applyBtn').onclick=render;$('refreshBtn').onclick=loadData;$('csvBtn').onclick=csv;$('printBtn').onclick=()=>window.print();
 $('logoutBtn').onclick=async()=>{await sb.auth.signOut();location.reload()};
 verifySession().catch(e=>{msg('loginMsg',e.message||'تعذر التحقق من الصلاحيات',true);sb.auth.signOut()});
