@@ -9,9 +9,9 @@
 
 - The repository is `aboadam789789-alt/ghazi-driver-portal`; its default branch is `main`.
 - Current production deployment: `dpl_G8xXUwC9syMx3h19NvfjmcNnawCA`, READY, from `main` commit `c4bb7a6f72a1dcf0caafc3a99816f93e23485a4e`.
-- The central workspace exists on `feature/central-workspace` and is deployed as a READY Preview. It is not in production.
+- The central workspace exists on `feature/central-workspace` and is deployed as a READY Preview. It is not in production. The register is stored in `docs/EL-GHAZY-MASTER-REGISTER.md` and linked from the portal.
 - The project control center exists on `feature/project-control-center` and is deployed as a READY Preview. It is not in production.
-- Both feature branches are based on the current production commit and are separate: central is 1 commit ahead of `main`; project control is 3 commits ahead. Neither branch contains the other.
+- Both feature branches are based on the current production commit and are separate: central is 3 commits ahead of `main`; project control is 3 commits ahead. Neither branch contains the other.
 - No production deployment, database schema change, or branch merge was performed during this audit.
 
 ## 2. Repository and deployment register
@@ -19,12 +19,12 @@
 | Item | Source / commit | Environment | Current status | Verification |
 |---|---|---|---|---|
 | Driver portal, admin, HR, finance | `main` / `c4bb7a6f72a1dcf0caafc3a99816f93e23485a4e` | Production | Deployed | Root routes previously returned HTTP 200; workflows not end-to-end tested in this audit |
-| EL-GHAZY CENTRAL | `feature/central-workspace` / `dd6cf078be7b3f9d8cb5b04ee94c12531961c84` | Preview | READY | Page source inspected; official logo path present; not production |
+| EL-GHAZY CENTRAL | `feature/central-workspace` / `3a37d18924896481f8dc70333ae614277a844193` | Preview | READY | Page source inspected; official logo path present; not production |
 | Project Control Center | `feature/project-control-center` / `2155489b0e8a75b38f09fcdcbc3d938464a11da2` | Preview | READY | Page source inspected; prior calculation/trigger tests recorded; full UI workflow still needs user acceptance testing |
 
 ### Verified links
 
-- Central workspace Preview: https://ghazi-driver-portal-3rpad6mut-aboadam789789-7874.vercel.app/central.html
+- Central workspace Preview: https://ghazi-driver-portal-5nf2wlyys-aboadam789789-7874.vercel.app/central.html
 - Project Control Center Preview: https://ghazi-driver-portal-clwnfl7oo-aboadam789789-7874.vercel.app/projects.html
 - Production base: https://ghazi-driver-portal-kfohukzne-aboadam789789-7874.vercel.app/
 - Vercel project: `ghazi-driver-portal` (`prj_Ex2nPNAw05D24T5anbaMI8Agxu8O`)
