@@ -138,3 +138,14 @@ The two active project names currently recorded are **مشروع قطعة ٧٥**
 - Never record planned progress as actual progress.
 - Never treat HTTP availability as proof of business workflow correctness.
 - Preserve the official logo exactly as supplied.
+
+
+## 9. Integration Preview and source audit — 25 November 2026
+
+- Created isolated branch `integration/central-project-control` from `feature/central-workspace`; original feature branches remain unchanged.
+- Copied `projects.html` from `feature/project-control-center` (source blob `27f92b09714fb4369ac57f57fe97340243a00adf`) into the integration branch.
+- Updated `central.html` so the Project Control card opens local `/projects.html` within the integration preview instead of the separate project-control preview.
+- Vercel integration deployment: `dpl_3mW3BVoFCY8ZTdFb9xsMhtzpPzMj`, state **READY**, preview URL https://ghazi-driver-portal-4mqih77w5-aboadam789789-7874.vercel.app, branch alias https://ghazi-driver-portal-git-integration-c-e20ec4-aboadam789789-7874.vercel.app. Deployed commit: `843efdde54d7933a0230f398fc39cd5b05bc4660`.
+- Source comparison: root `admin.html` and `hr.html` match between `main` and `feature/central-workspace`; their `src/` counterparts have different blob SHAs. Root and `src/` `index.html` are identical. No root `package.json` or `vercel.json` was found. This does not yet establish the intended long-term canonical source; no duplicate files were deleted.
+- Integration branch is a Preview only. No PR merge, production deployment, Supabase schema change, or permission change was performed.
+- Next: verify preview route behavior and SSO access, inspect Vercel project build/root settings, then run acceptance tests for project/task/progress/approval before requesting production approval.
