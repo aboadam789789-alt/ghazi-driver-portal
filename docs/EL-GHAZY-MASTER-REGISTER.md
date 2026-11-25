@@ -149,3 +149,12 @@ The two active project names currently recorded are **مشروع قطعة ٧٥**
 - Source comparison: root `admin.html` and `hr.html` match between `main` and `feature/central-workspace`; their `src/` counterparts have different blob SHAs. Root and `src/` `index.html` are identical. No root `package.json` or `vercel.json` was found. This does not yet establish the intended long-term canonical source; no duplicate files were deleted.
 - Integration branch is a Preview only. No PR merge, production deployment, Supabase schema change, or permission change was performed.
 - Next: verify preview route behavior and SSO access, inspect Vercel project build/root settings, then run acceptance tests for project/task/progress/approval before requesting production approval.
+
+
+### Browser acceptance status — 25 November 2026
+
+- Preview deployment record is READY on Vercel: `dpl_5KVi2eU6xgrZ3xU7iVJfL2M8Ej1a`, commit `dbc50599977cc2248122443fd60a2255b5645149`.
+- Exact branch alias: https://ghazi-driver-portal-git-integration-c-e20ec4-aboadam789789-7874.vercel.app/
+- Browser verification confirms the branch alias redirects to Vercel login / SSO for `central.html` and `projects.html`. Application content is not rendered in an unauthenticated browser. An initial direct deployment-host attempt returned `DEPLOYMENT_NOT_FOUND`; the branch alias is the correct SSO-protected URL.
+- Therefore, page-level visual and end-to-end acceptance tests are **blocked pending an authorized Vercel session**. No login credentials were entered, and no forms or database writes were attempted.
+- Supabase read-only schema/constraint/policy inspection confirmed the expected project-control columns, foreign keys, status/range checks, and management RLS policies for owner/system_admin/equipment_manager. No schema or policy modifications were made.
