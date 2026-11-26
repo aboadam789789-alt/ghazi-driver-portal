@@ -158,3 +158,10 @@ The two active project names currently recorded are **مشروع قطعة ٧٥**
 - Browser verification confirms the branch alias redirects to Vercel login / SSO for `central.html` and `projects.html`. Application content is not rendered in an unauthenticated browser. An initial direct deployment-host attempt returned `DEPLOYMENT_NOT_FOUND`; the branch alias is the correct SSO-protected URL.
 - Therefore, page-level visual and end-to-end acceptance tests are **blocked pending an authorized Vercel session**. No login credentials were entered, and no forms or database writes were attempted.
 - Supabase read-only schema/constraint/policy inspection confirmed the expected project-control columns, foreign keys, status/range checks, and management RLS policies for owner/system_admin/equipment_manager. No schema or policy modifications were made.
+
+## Resumption note — 26 November 2026
+
+- Rechecked integration Preview deployment `dpl_6WYTtV654nM8j2B9JouJNQquVger`: state **READY**, branch `integration/central-project-control`, commit `1c133ac82e57c7e978daa3a5f6725795f4d06235`, branch alias remains the SSO-protected preview.
+- TinyFish Browser Context Profiles currently reports no saved sign-in for Vercel. A fresh Vercel sign-in handoff was initiated in this conversation; it is **not yet saved/connected**.
+- No authenticated page acceptance test, app login, form submission, Supabase write, schema/policy change, branch merge, or production deployment has occurred in this resumption.
+- Next acceptance gate: user completes the Vercel sign-in handoff and saves the session; then verify the integration preview route and proceed to project/task/progress approval testing with an authorized EL-GHAZY application account and approved test data.
