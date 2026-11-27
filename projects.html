@@ -143,6 +143,7 @@ const actionStatuses={open:'مفتوح',in_progress:'قيد المعالجة',wa
 const priorities={low:'منخفضة',medium:'متوسطة',high:'مرتفعة',critical:'حرجة'};
 const types={issue:'عقبة',decision:'قرار'};
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function safeEvidenceLink(value){const raw=String(value??'').trim();if(!raw)return '';try{const url=new URL(raw,location.href);if(url.protocol!=='http:'&&url.protocol!=='https:')return '<br><small>رابط الإثبات غير صالح.</small>';return '<br><a target="_blank" rel="noopener noreferrer" href="'+esc(url.href)+'">فتح الإثبات</a>'}catch{return '<br><small>رابط الإثبات غير صالح.</small>'}}
 function msg(id,text,bad=false){$(id).textContent=text;$(id).classList.remove('hidden');$(id).classList.toggle('error',bad);$(id).classList.toggle('success',!bad)}
 function date(v){return v?new Date(v+'T00:00:00').toLocaleDateString('ar-EG'):'—'}
 function percent(v){return v===null||v===undefined?'غير مقاس':Number(v).toLocaleString('ar-EG',{maximumFractionDigits:1})+'%'}
@@ -202,7 +203,7 @@ function renderTasks(){
 }
 function renderUpdates(){
  const pm=Object.fromEntries(projects.map(p=>[p.id,p.name]));
- $('updateRows').innerHTML=updates.length?updates.map(u=>{const t=tasks.find(x=>x.id===u.task_id);const pending=u.status==='pending';return '<tr><td>'+new Date(u.created_at).toLocaleDateString('ar-EG')+'</td><td>'+esc(t?.title||'مهمة محذوفة')+'<br><small>'+esc(pm[u.project_id]||'')+'</small></td><td>'+percent(u.progress_percent)+'</td><td>'+esc(u.notes)+' '+(u.evidence_path?'<br><a target="_blank" rel="noopener" href="'+esc(u.evidence_path)+'">فتح الإثبات</a>':'')+'</td><td><span class="pill '+(u.status==='approved'?'good':u.status==='rejected'?'bad':'warn')+'">'+(updateStatuses[u.status]||u.status)+'</span>'+(u.rejection_reason?'<br><small>'+esc(u.rejection_reason)+'</small>':'')+'</td><td>'+(pending?'<div class="actions"><button class="approve" data-review="approve" data-id="'+u.id+'">اعتماد</button><button class="reject" data-review="reject" data-id="'+u.id+'">رفض</button></div>':'—')+'</td></tr>'}).join(''):'<tr><td colspan="6" class="empty">لا توجد تحديثات إنجاز بعد.</td></tr>';
+ $('updateRows').innerHTML=updates.length?updates.map(u=>{const t=tasks.find(x=>x.id===u.task_id);const pending=u.status==='pending';return '<tr><td>'+new Date(u.created_at).toLocaleDateString('ar-EG')+'</td><td>'+esc(t?.title||'مهمة محذوفة')+'<br><small>'+esc(pm[u.project_id]||'')+'</small></td><td>'+percent(u.progress_percent)+'</td><td>'+esc(u.notes)+' '+safeEvidenceLink(u.evidence_path)+'</td><td><span class="pill '+(u.status==='approved'?'good':u.status==='rejected'?'bad':'warn')+'">'+(updateStatuses[u.status]||u.status)+'</span>'+(u.rejection_reason?'<br><small>'+esc(u.rejection_reason)+'</small>':'')+'</td><td>'+(pending?'<div class="actions"><button class="approve" data-review="approve" data-id="'+u.id+'">اعتماد</button><button class="reject" data-review="reject" data-id="'+u.id+'">رفض</button></div>':'—')+'</td></tr>'}).join(''):'<tr><td colspan="6" class="empty">لا توجد تحديثات إنجاز بعد.</td></tr>';
 }
 function renderActions(){
  const pm=Object.fromEntries(projects.map(p=>[p.id,p.name]));
